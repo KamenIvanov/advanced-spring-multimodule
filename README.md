@@ -21,7 +21,7 @@ The project strictly follows a Contract-Driven, highly decoupled architecture. D
        │                 │                   │                          │
        ▼                 ▼                   ▼                          ▼
 ┌──────────────┐  ┌──────────────┐  ┌────────────────────────────────┐  │
-│   dao-impl   │  │ bridge-impl  │  │         business-logic         │--│
+│   dao-impl   │  │ bridge-impl  │  │         business-logic         │  │
 └──────┬───────┘  └──────┬───────┘  └──────┬──────────────┬──────────┘  │
        │                 │                 │              │             │
        ▼                 ▼                 ▼              ▼             │
@@ -57,8 +57,8 @@ The project strictly follows a Contract-Driven, highly decoupled architecture. D
 * **Purpose:** The concrete infrastructure implementation for out-of-process communication. It isolates heavy messaging and caching libraries from the core logic.
 
 ### 6. `business-logic`
-* **Dependencies:** `dao-api`, `bridge-api`, and `rest-api`.
-* **Purpose:** This is where the core business services, rules, and use-case validations live. It implements the endpoint logic defined by the REST contracts but remains free of direct Spring Web controller wiring.
+* **Dependencies:** `dao-api` and `bridge-api`.
+* **Purpose:** This is where the core business services, rules, and use-case validations live.
 
 ### 7. `application`
 * **Dependencies:** `dao-impl`, `bridge-impl`, `business-logic`, database drivers (`mysql-connector-j`), and `spring-boot`.
@@ -80,7 +80,3 @@ The project strictly follows a Contract-Driven, highly decoupled architecture. D
 1. **Strict Boundary Enforcement:** Developers cannot accidentally cross-contaminate layers (e.g., injecting a Spring Data Repository directly into a Web Controller) because the build tool simply won't allow it.
 2. **Blazing Fast Local Testing:** You can run pure unit tests in `business-logic` and `dao-impl` in milliseconds, completely bypassing Spring Application Context overhead.
 3. **Pluggable Architecture:** Want to swap MySQL (`dao-impl`) for MongoDB, or Kafka (`bridge-impl`) for RabbitMQ? You only rewrite the specific implementation module. The `business-logic` remains untouched.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
