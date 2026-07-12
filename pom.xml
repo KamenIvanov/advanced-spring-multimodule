@@ -20,14 +20,8 @@
         <plugin.compiler.version>3.14.1</plugin.compiler.version>
         <plugin.source.version>3.3.1</plugin.source.version>
         <plugin.resources.version>3.3.1</plugin.resources.version>
-        <plugin.surefire.version>3.5.4</plugin.surefire.version>
-        <plugin.build.helper.version>3.6.1</plugin.build.helper.version>
         <plugin.maven.properties.version>1.2.1</plugin.maven.properties.version>
-        <plugin.jar.version>3.5.0</plugin.jar.version>
         <plugin.javadoc.version>3.12.0</plugin.javadoc.version>
-        <plugin.buildnumber.version>3.2.1</plugin.buildnumber.version>
-        <plugin.enforcer.version>3.6.2</plugin.enforcer.version>
-        <plugin.release.version>3.2.0</plugin.release.version>
 
         <spring.boot.version>4.0.2</spring.boot.version>
     </properties>
@@ -161,64 +155,6 @@
 
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>buildnumber-maven-plugin</artifactId>
-                    <version>${plugin.buildnumber.version}</version>
-                    <executions>
-                        <execution>
-                            <phase>generate-resources</phase>
-                            <goals>
-                                <goal>create</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <scmBranchPropertyName>scmBranch</scmBranchPropertyName>
-                        <timestampPropertyName>buildTime</timestampPropertyName>
-                        <buildNumberPropertyName>scmRevision</buildNumberPropertyName>
-                        <shortRevisionLength>8</shortRevisionLength>
-                        <revisionOnScmFailure>0</revisionOnScmFailure>
-                        <timestampFormat>{yyyy-MM-dd HH:mmXXX}</timestampFormat>
-                        <doCheck>false</doCheck>
-                        <doUpdate>false</doUpdate>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${plugin.surefire.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>${plugin.enforcer.version}</version>
-                    <executions>
-                        <execution>
-                            <id>check</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>enforce</goal>
-                            </goals>
-                            <configuration>
-                                <rules>
-                                    <requireMavenVersion>
-                                        <version>[${maven.min.version},)</version>
-                                    </requireMavenVersion>
-                                </rules>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>${plugin.build.helper.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
                     <artifactId>properties-maven-plugin</artifactId>
                     <version>${plugin.maven.properties.version}</version>
                     <executions>
@@ -232,30 +168,6 @@
                             </configuration>
                         </execution>
                     </executions>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring.boot.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>${plugin.jar.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>${plugin.release.version}</version>
-                    <configuration>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <tagNameFormat>@{project.version}</tagNameFormat>
-                        <releaseProfiles>release</releaseProfiles>
-                        <preparationGoals>clean verify</preparationGoals>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
