@@ -1,11 +1,18 @@
 package com.pe.advanced.domain;
 
-public class AbstractNamedDomain<IdType> extends AbstractUpdatableDomain<IdType> {
+import java.util.UUID;
+
+public abstract class AbstractNamedDomain<IdType> extends AbstractUpdatableDomain<IdType> {
 
     private String name;
 
-    public AbstractNamedDomain() {
+    protected AbstractNamedDomain() {
         // POJO
+    }
+
+    protected AbstractNamedDomain(IdType id, UUID createdById, String name) {
+        super(id, createdById);
+        this.name = name;
     }
 
     public String getName() {

@@ -15,6 +15,10 @@ public abstract class AbstractUpdatableDomain<IdType> extends AbstractCreatableD
         setId(id);
     }
 
+    protected AbstractUpdatableDomain(IdType id, UUID createdById) {
+        super(id, createdById);
+    }
+
     public Instant getUpdatedAt() {
         return updatedAt;
     }

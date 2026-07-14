@@ -22,6 +22,11 @@ public abstract class AbstractCreatableDomain<IdType> {
         this.createdAt = createdAt;
     }
 
+    protected AbstractCreatableDomain(IdType id, UUID createdById) {
+        this.id = id;
+        this.createdById = createdById;
+    }
+
     public IdType getId() {
         return id;
     }
