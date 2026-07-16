@@ -1,21 +1,20 @@
 package com.pe.advanced.domain.product;
 
-import com.pe.advanced.domain.AbstractUpdatableDomain;
+import com.pe.advanced.domain.AbstractUpdatable;
 
-import java.time.Instant;
 import java.util.UUID;
 
-public class ProductSpecification extends AbstractUpdatableDomain<UUID> {
+public class ProductSpecification extends AbstractUpdatable<UUID> {
 
     private String dimensions;
     private double weight;
 
     public ProductSpecification() {
-       // POJO
+        // POJO
     }
 
-    public ProductSpecification(UUID id, UUID createdById, String dimensions, double weight) {
-        super(id, createdById);
+    public ProductSpecification(UUID id, String dimensions, double weight) {
+        super(id);
         this.dimensions = dimensions;
         this.weight = weight;
     }

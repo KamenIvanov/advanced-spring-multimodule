@@ -1,11 +1,11 @@
 package com.pe.advanced.domain.category;
 
-import com.pe.advanced.domain.AbstractCreatableDomain;
+import com.pe.advanced.domain.AbstractCreatable;
 
 import java.time.Instant;
 import java.util.UUID;
 
-public class CategoryAssignment extends AbstractCreatableDomain<UUID> {
+public class CategoryAssignment extends AbstractCreatable<UUID> {
 
     private UUID productId;
     private UUID categoryId;

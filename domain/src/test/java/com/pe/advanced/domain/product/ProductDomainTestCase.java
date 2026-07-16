@@ -1,8 +1,5 @@
-package com.pe.advanced.domain.category;
+package com.pe.advanced.domain.product;
 
-import com.pe.advanced.domain.product.Product;
-import com.pe.advanced.domain.product.ProductSpecification;
-import com.pe.advanced.domain.product.ProductStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ProductDomainTestCase {
 
     private static final UUID CREATOR_ID = UUID.randomUUID();
-    private static final ProductSpecification spec = new ProductSpecification(UUID.randomUUID(), CREATOR_ID, "10x20x30", 1.5);
+    private static final ProductSpecification spec = new ProductSpecification(UUID.randomUUID(), "10x20x30", 1.5);
 
     private Product product;
 
     @BeforeEach
     void setUp() {
-        product = new Product(UUID.randomUUID(), CREATOR_ID, "ThinkPad X1", "SKU-123", BigDecimal.valueOf(1999), spec);
+        product = new Product(UUID.randomUUID(), CREATOR_ID, CREATOR_ID, "ThinkPad X1", "SKU-123", BigDecimal.valueOf(1999), spec);
     }
 
     // --- DRAFT Status Transitions ---

@@ -1,30 +1,40 @@
 package com.pe.advanced.domain.product;
 
-import com.pe.advanced.domain.AbstractNamedDomain;
+import com.pe.advanced.domain.AbstractAuditable;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Product extends AbstractNamedDomain<UUID> {
+public class Product extends AbstractAuditable<UUID> {
 
+    private String name;
     private String sku;
     private ProductStatus status;
     private BigDecimal price;
 
     // 1-1 relationship (Lifecycle bound)
-    private ProductSpecification specifications;
+    private ProductSpecification specification;
 
     public Product() {
         // POJO
     }
 
-    public Product(UUID id, UUID createdById, String name, String sku, BigDecimal price, ProductSpecification specifications) {
-        super(id, createdById, name);
+    public Product(UUID id, UUID createdById, UUID updatedById, String name, String sku, BigDecimal price, ProductSpecification specification) {
+        super(id, createdById, updatedById);
+        this.name = Objects.requireNonNull(name);
         this.sku = Objects.requireNonNull(sku);
         this.price = Objects.requireNonNull(price);
-        this.specifications = Objects.requireNonNull(specifications);
+        this.specification = Objects.requireNonNull(specification);
         this.status = ProductStatus.DRAFT;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSku() {
@@ -51,12 +61,12 @@ public class Product extends AbstractNamedDomain<UUID> {
         this.price = price;
     }
 
-    public ProductSpecification getSpecifications() {
-        return specifications;
+    public ProductSpecification getSpecification() {
+        return specification;
     }
 
-    public void setSpecifications(ProductSpecification specifications) {
-        this.specifications = specifications;
+    public void setSpecification(ProductSpecification specification) {
+        this.specification = specification;
     }
 
     public void transitionTo(ProductStatus nextStatus) {

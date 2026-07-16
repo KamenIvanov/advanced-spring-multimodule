@@ -1,30 +1,24 @@
 package com.pe.advanced.domain;
 
 import java.time.Instant;
-import java.util.UUID;
 
-public abstract class AbstractCreatableDomain<IdType> {
+public abstract class AbstractCreatable<IdType> {
 
     private IdType id;
     private Instant createdAt;
-    private UUID createdById;
 
-    protected AbstractCreatableDomain() {
-        // POJO
+    protected AbstractCreatable() {
+        this.createdAt = Instant.now();
     }
 
-    protected AbstractCreatableDomain(IdType id) {
+    protected AbstractCreatable(IdType id) {
         this.id = id;
+        this.createdAt = Instant.now();
     }
 
-    protected AbstractCreatableDomain(IdType id, Instant createdAt) {
+    protected AbstractCreatable(IdType id, Instant createdAt) {
         this.id = id;
         this.createdAt = createdAt;
-    }
-
-    protected AbstractCreatableDomain(IdType id, UUID createdById) {
-        this.id = id;
-        this.createdById = createdById;
     }
 
     public IdType getId() {
@@ -43,14 +37,6 @@ public abstract class AbstractCreatableDomain<IdType> {
         this.createdAt = createdAt;
     }
 
-    public UUID getCreatedById() {
-        return createdById;
-    }
-
-    public void setCreatedById(UUID createdById) {
-        this.createdById = createdById;
-    }
-
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
@@ -64,7 +50,7 @@ public abstract class AbstractCreatableDomain<IdType> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final AbstractCreatableDomain<?> that = (AbstractCreatableDomain<?>) o;
+        final AbstractCreatable<?> that = (AbstractCreatable<?>) o;
         return id != null && id.equals(that.id);
     }
 
