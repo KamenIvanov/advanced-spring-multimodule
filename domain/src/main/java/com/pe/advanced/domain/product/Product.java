@@ -11,7 +11,7 @@ public class Product extends AbstractAuditable<UUID> {
     private String name;
     private String sku;
     private BigDecimal price;
-    private ProductStatus status;
+    private ProductStatus status = ProductStatus.DRAFT;
 
     // 1-1 relationship (Lifecycle bound)
     private ProductSpecification specification;
@@ -26,7 +26,6 @@ public class Product extends AbstractAuditable<UUID> {
         this.sku = Objects.requireNonNull(sku);
         this.price = Objects.requireNonNull(price);
         this.specification = Objects.requireNonNull(specification);
-        this.status = ProductStatus.DRAFT;
     }
 
     public String getName() {
