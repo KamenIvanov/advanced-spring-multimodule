@@ -1,10 +1,10 @@
 package com.pe.advanced.dao.api.product;
 
-import com.pe.advanced.dao.api.BaseQuery;
+import com.pe.advanced.dao.api.search.AbstractParams;
 
 import java.util.UUID;
 
-public class ProductSearchQuery extends BaseQuery<UUID, ProductSortByFields> {
+public class ProductSearchQuery extends AbstractParams<UUID, ProductSort> {
 
     private String name;
     private String sku;

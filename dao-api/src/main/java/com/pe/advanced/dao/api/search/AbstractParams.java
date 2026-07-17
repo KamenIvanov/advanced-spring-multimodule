@@ -1,22 +1,22 @@
-package com.pe.advanced.dao.api;
+package com.pe.advanced.dao.api.search;
 
 import java.util.List;
 
-public abstract class BaseQuery<ID, Sortable extends SortableEnum> {
+public abstract class AbstractParams<ID, Sortable extends SortBy> {
 
-    protected List<ID> ids;
     protected int page;
     protected int size;
+    protected List<ID> ids;
     private Sortable sortBy;
-    private SortDirection sortDirection;
+    private SortDirection sortDirection = SortDirection.ASC;
 
-    protected BaseQuery() {
+    protected AbstractParams() {
         this(0, 20);
     }
 
-    protected BaseQuery(int page, int size) {
-        this.page = page;
-        this.size = size;
+    protected AbstractParams(int page, int size) {
+        this.page = Math.max(page, 0);
+        this.size = size < 1 ? 10 : size;
     }
 
     public List<ID> getIds() {

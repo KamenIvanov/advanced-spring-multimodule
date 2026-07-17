@@ -1,8 +1,8 @@
 package com.pe.advanced.dao.api.category;
 
-import com.pe.advanced.dao.api.SortableEnum;
+import com.pe.advanced.dao.api.search.SortBy;
 
-public enum CategorySortByFields implements SortableEnum {
+public enum CategorySortByFields implements SortBy {
 
     NAME("name"),
     CREATED_AT("createdAt"),
@@ -15,7 +15,7 @@ public enum CategorySortByFields implements SortableEnum {
     }
 
     @Override
-    public String getValue() {
+    public String getPropertyName() {
         return value;
     }
 }

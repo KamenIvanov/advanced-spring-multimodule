@@ -1,4 +1,4 @@
-package com.pe.advanced.dao.api;
+package com.pe.advanced.dao.api.search;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.pe.advanced.dao.api.category;
 
-import com.pe.advanced.dao.api.SearchableDao;
+import com.pe.advanced.dao.api.search.SearchableDao;
 import com.pe.advanced.domain.category.Category;
 
 import java.util.UUID;
