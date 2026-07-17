@@ -10,8 +10,8 @@ public class Product extends AbstractAuditable<UUID> {
 
     private String name;
     private String sku;
-    private ProductStatus status;
     private BigDecimal price;
+    private ProductStatus status;
 
     // 1-1 relationship (Lifecycle bound)
     private ProductSpecification specification;
@@ -45,20 +45,20 @@ public class Product extends AbstractAuditable<UUID> {
         this.sku = sku;
     }
 
-    public ProductStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ProductStatus status) {
-        this.status = status;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
     }
 
     public ProductSpecification getSpecification() {
@@ -76,3 +76,4 @@ public class Product extends AbstractAuditable<UUID> {
         this.status = nextStatus;
     }
 }
+
