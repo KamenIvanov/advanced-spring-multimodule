@@ -11,14 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ProductDomainTestCase {
 
-    private static final UUID CREATOR_ID = UUID.randomUUID();
     private static final ProductSpecification spec = new ProductSpecification(UUID.randomUUID(), "10x20x30", 1.5);
 
     private Product product;
 
     @BeforeEach
     void setUp() {
-        product = new Product(UUID.randomUUID(), CREATOR_ID, CREATOR_ID, "ThinkPad X1", "SKU-123", BigDecimal.valueOf(1999), spec);
+        product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "ThinkPad X1", "SKU-123", BigDecimal.valueOf(1999), spec);
     }
 
     // --- DRAFT Status Transitions ---

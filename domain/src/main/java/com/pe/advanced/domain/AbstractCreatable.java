@@ -1,6 +1,7 @@
 package com.pe.advanced.domain;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public abstract class AbstractCreatable<IdType> {
 
@@ -12,13 +13,8 @@ public abstract class AbstractCreatable<IdType> {
     }
 
     protected AbstractCreatable(IdType id) {
-        this.id = id;
+        this.id = Objects.requireNonNull(id);
         this.createdAt = Instant.now();
-    }
-
-    protected AbstractCreatable(IdType id, Instant createdAt) {
-        this.id = id;
-        this.createdAt = createdAt;
     }
 
     public IdType getId() {
