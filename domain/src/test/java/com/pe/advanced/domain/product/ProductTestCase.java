@@ -9,7 +9,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ProductDomainTestCase {
+class ProductTestCase {
 
     private static final ProductSpecification spec = new ProductSpecification(UUID.randomUUID(), "10x20x30", 1.5);
 
