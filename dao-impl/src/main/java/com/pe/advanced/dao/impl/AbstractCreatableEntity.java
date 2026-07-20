@@ -20,11 +20,12 @@ public abstract class AbstractCreatableEntity {
     private Instant createdAt;
 
     protected AbstractCreatableEntity() {
-       // POJO
+        this.createdAt = Instant.now();
     }
 
     protected AbstractCreatableEntity(UUID id) {
         this.id = id;
+        this.createdAt = Instant.now();
     }
 
     public UUID getId() {
