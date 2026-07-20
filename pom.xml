@@ -72,6 +72,15 @@
                 <artifactId>business-logic</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <!-- Test -->
+            <dependency>
+                <groupId>com.pe.advanced.spring</groupId>
+                <artifactId>domain</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
