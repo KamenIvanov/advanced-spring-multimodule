@@ -1,8 +1,6 @@
 package com.pe.advanced.dao.api.search;
 
-import com.pe.advanced.dao.api.CrudDao;
-
-public interface SearchableDao<IdType, Type, Params extends AbstractParams<? extends SortBy>> extends CrudDao<IdType, Type> {
+public interface SearchableDao<Type, Params extends AbstractParams<? extends SortBy>> {
 
     ResultPage<Type> search(Params criteria);
 }
