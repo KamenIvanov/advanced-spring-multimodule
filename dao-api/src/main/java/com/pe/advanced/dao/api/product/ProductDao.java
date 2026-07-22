@@ -6,7 +6,7 @@ import com.pe.advanced.domain.product.Product;
 
 import java.util.UUID;
 
-public interface ProductDao extends SearchableDao<UUID, Product, ProductSearchQuery> {
+public interface ProductDao extends SearchableDao<UUID, Product, ProductSearchParams> {
 
     Product loadBySku(String sku);
 }

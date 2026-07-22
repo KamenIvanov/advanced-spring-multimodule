@@ -2,9 +2,7 @@ package com.pe.advanced.dao.api.category;
 
 import com.pe.advanced.dao.api.search.AbstractParams;
 
-import java.util.UUID;
-
-public class CategorySearchQuery extends AbstractParams<UUID, CategorySortByFields> {
+public class CategorySearchParams extends AbstractParams<CategorySortByFields> {
 
     private String name;
     private Boolean active;

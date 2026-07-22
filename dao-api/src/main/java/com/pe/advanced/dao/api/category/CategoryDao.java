@@ -5,6 +5,6 @@ import com.pe.advanced.domain.category.Category;
 
 import java.util.UUID;
 
-public interface CategoryDao extends SearchableDao<UUID, Category, CategorySearchQuery> {
+public interface CategoryDao extends SearchableDao<UUID, Category, CategorySearchParams> {
 
 }

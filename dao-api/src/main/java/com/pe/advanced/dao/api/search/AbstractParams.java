@@ -1,12 +1,9 @@
 package com.pe.advanced.dao.api.search;
 
-import java.util.List;
-
-public abstract class AbstractParams<ID, Sortable extends SortBy> {
+public abstract class AbstractParams<Sortable extends SortBy> {
 
     protected int page;
     protected int size;
-    protected List<ID> ids;
     private Sortable sortBy;
     private SortDirection sortDirection = SortDirection.ASC;
 
@@ -17,14 +14,6 @@ public abstract class AbstractParams<ID, Sortable extends SortBy> {
     protected AbstractParams(int page, int size) {
         this.page = Math.max(page, 0);
         this.size = size < 1 ? 10 : size;
-    }
-
-    public List<ID> getIds() {
-        return ids;
-    }
-
-    public void setIds(List<ID> ids) {
-        this.ids = ids;
     }
 
     public int getPage() {
