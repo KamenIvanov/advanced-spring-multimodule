@@ -56,10 +56,6 @@ public class Product extends AbstractAuditable<UUID> {
         return status;
     }
 
-    public void setStatus(ProductStatus status) {
-        this.status = status;
-    }
-
     public ProductSpecification getSpecification() {
         return specification;
     }
