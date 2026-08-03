@@ -16,8 +16,8 @@ public interface Transformer<Input, Output> {
     /**
      * Copies the data from input to output.
      *
-     * @param input  the input entity
-     * @param output the output entity
+     * @param input  the input object
+     * @param output the output object
      */
     default void copyToOutput(Input input, Output output) {
 

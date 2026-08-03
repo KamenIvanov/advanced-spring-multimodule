@@ -19,8 +19,8 @@ public interface BiTransformer<Input, Output> extends Transformer<Input, Output>
     /**
      * Copies the data from output to input.
      *
-     * @param output the output entity
-     * @param input  the input entity
+     * @param output the output object
+     * @param input  the input object
      */
     default void copyToInput(Output output, Input input) {
 
