@@ -4,12 +4,12 @@ import com.pe.advanced.domain.utils.EnumUtils;
 
 public abstract class AbstractEnumTransformer<Input extends Enum<Input>, Output extends Enum<Output>> implements BiTransformer<Input, Output> {
 
-    private final Class<Input> entityClass;
-    private final Class<Output> entityVoClass;
+    private final Class<Input> inputClass;
+    private final Class<Output> outputClass;
 
-    protected AbstractEnumTransformer(Class<Input> entityClass, Class<Output> entityVoClass) {
-        this.entityClass = entityClass;
-        this.entityVoClass = entityVoClass;
+    protected AbstractEnumTransformer(Class<Input> inputClass, Class<Output> outputClass) {
+        this.inputClass = inputClass;
+        this.outputClass = outputClass;
     }
 
     @Override
@@ -17,7 +17,7 @@ public abstract class AbstractEnumTransformer<Input extends Enum<Input>, Output 
         if (output == null) {
             return null;
         }
-        return EnumUtils.enumForName(entityClass, output.name());
+        return EnumUtils.enumForName(inputClass, output.name());
     }
 
     @Override
@@ -25,6 +25,6 @@ public abstract class AbstractEnumTransformer<Input extends Enum<Input>, Output 
         if (entity == null) {
             return null;
         }
-        return EnumUtils.enumForName(entityVoClass, entity.name());
+        return EnumUtils.enumForName(outputClass, entity.name());
     }
 }
