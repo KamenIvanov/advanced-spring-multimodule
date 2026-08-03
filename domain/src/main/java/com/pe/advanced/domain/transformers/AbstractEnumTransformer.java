@@ -1,6 +1,6 @@
 package com.pe.advanced.domain.transformers;
 
-import com.pe.advanced.domain.utils.ClassUtils;
+import com.pe.advanced.domain.utils.EnumUtils;
 
 public abstract class AbstractEnumTransformer<Input extends Enum<Input>, Output extends Enum<Output>> implements BiTransformer<Input, Output> {
 
@@ -12,22 +12,20 @@ public abstract class AbstractEnumTransformer<Input extends Enum<Input>, Output 
         this.entityVoClass = entityVoClass;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Input createInput(Output output) {
         if (output == null) {
             return null;
         }
-        return (Input) ClassUtils.enumForName(entityClass, output.name());
+        return EnumUtils.enumForName(entityClass, output.name());
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Output createOutput(Input entity) {
         if (entity == null) {
             return null;
         }
-        return (Output) ClassUtils.enumForName(entityVoClass, entity.name());
+        return EnumUtils.enumForName(entityVoClass, entity.name());
     }
 
 }
