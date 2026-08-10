@@ -19,6 +19,7 @@
         <plugin.resources.version>3.3.1</plugin.resources.version>
         <plugin.maven.properties.version>1.2.1</plugin.maven.properties.version>
         <plugin.javadoc.version>3.12.0</plugin.javadoc.version>
+        <plugin.maven.enforcer.version>3.5.0</plugin.maven.enforcer.version>
 
         <spring.boot.version>4.0.2</spring.boot.version>
     </properties>
@@ -167,6 +168,37 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${plugin.maven.enforcer.version}</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-no-lombok</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <bannedDependencies>
+                                        <excludes>
+                                            <exclude>org.projectlombok:lombok</exclude>
+                                        </excludes>
+                                        <message>
+                                            Lombok is intentionally banned from this codebase.
+                                            See Chapter 5: The Lombok Illusion for the full reasoning —
+                                            explicit Java (records, plain classes, deliberate builders)
+                                            is our default for transparency, debuggability, and toolchain stability.
+                                        </message>
+                                    </bannedDependencies>
+                                </rules>
+                                <fail>true</fail>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -194,6 +226,11 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
