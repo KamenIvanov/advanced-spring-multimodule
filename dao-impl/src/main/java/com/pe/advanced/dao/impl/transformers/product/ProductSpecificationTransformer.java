@@ -45,7 +45,7 @@ public class ProductSpecificationTransformer extends AbstractUpdatableEntityTran
             return null;
         }
 
-        final var specification = new ProductSpecification();
+        final var specification = new ProductSpecification(entity.getId(), entity.getCreatedAt(), entity.getUpdatedAt());
         copyToOutput(entity, specification);
         return specification;
     }

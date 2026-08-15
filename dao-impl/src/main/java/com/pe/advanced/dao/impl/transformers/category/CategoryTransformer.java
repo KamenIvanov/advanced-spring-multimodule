@@ -45,7 +45,7 @@ public class CategoryTransformer extends AbstractAuditableEntityTransformer<Cate
             return null;
         }
 
-        final var category = new Category();
+        final var category = new Category(entity.getId(), entity.getCreatedAt(), entity.getUpdatedAt());
         copyToOutput(entity, category);
         return category;
     }

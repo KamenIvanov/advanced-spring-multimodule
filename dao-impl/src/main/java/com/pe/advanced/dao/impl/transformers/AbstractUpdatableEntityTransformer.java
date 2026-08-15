@@ -13,11 +13,4 @@ public abstract class AbstractUpdatableEntityTransformer<S extends AbstractUpdat
 
         source.setUpdatedAt(dest.getUpdatedAt());
     }
-
-    @Override
-    public void copyToOutput(S source, D dest) {
-        super.copyToOutput(source, dest);
-
-        dest.setUpdatedAt(source.getUpdatedAt());
-    }
 }

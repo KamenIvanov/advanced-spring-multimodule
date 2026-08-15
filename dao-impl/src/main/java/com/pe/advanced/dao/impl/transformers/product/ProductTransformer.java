@@ -51,7 +51,7 @@ public class ProductTransformer extends AbstractAuditableEntityTransformer<Produ
             return null;
         }
 
-        final var product = new Product();
+        final var product = new Product(entity.getId(), entity.getCreatedAt(), entity.getUpdatedAt());
         copyToOutput(entity, product);
         return product;
     }

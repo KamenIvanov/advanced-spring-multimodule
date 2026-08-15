@@ -2,6 +2,7 @@ package com.pe.advanced.domain.product;
 
 import com.pe.advanced.domain.AbstractUpdatable;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class ProductSpecification extends AbstractUpdatable<UUID> {
@@ -9,8 +10,8 @@ public class ProductSpecification extends AbstractUpdatable<UUID> {
     private String dimensions;
     private double weight;
 
-    public ProductSpecification() {
-        // POJO
+    public ProductSpecification(UUID id, Instant createdAt, Instant updatedAt) {
+        super(id, createdAt, updatedAt);
     }
 
     public ProductSpecification(UUID id, String dimensions, double weight) {

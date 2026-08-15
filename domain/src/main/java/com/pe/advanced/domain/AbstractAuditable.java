@@ -1,5 +1,6 @@
 package com.pe.advanced.domain;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public abstract class AbstractAuditable<IdType> extends AbstractUpdatable<IdType> {
@@ -11,8 +12,8 @@ public abstract class AbstractAuditable<IdType> extends AbstractUpdatable<IdType
         // POJO
     }
 
-    protected AbstractAuditable(IdType id) {
-        super(id);
+    protected AbstractAuditable(IdType id, Instant createdAt, Instant updatedAt) {
+        super(id, createdAt, updatedAt);
     }
 
     protected AbstractAuditable(IdType id, UUID createdById, UUID updatedById) {
