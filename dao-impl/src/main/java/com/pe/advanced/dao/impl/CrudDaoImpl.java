@@ -60,7 +60,7 @@ public abstract class CrudDaoImpl<
                 .orElseThrow(() -> new NotFoundException("Entity with id '" + domain.getId() + "' not found."));
 
         transformer.copyToInput(domain, entity);
-        updatableEntity(entity);
+        preUpdate(entity);
         entity = repository.save(entity);
 
         return transformer.createOutput(entity);
@@ -90,9 +90,12 @@ public abstract class CrudDaoImpl<
 
     protected void preCreate(AbstractCreatableEntity entity) {
         entity.setCreatedAt(Instant.now());
+        if (entity instanceof AbstractUpdatableEntity updatableEntity) {
+            updatableEntity.setUpdatedAt(entity.getCreatedAt());
+        }
     }
 
-    protected void updatableEntity(AbstractCreatableEntity entity) {
+    protected void preUpdate(AbstractCreatableEntity entity) {
         if (entity instanceof AbstractUpdatableEntity updatableEntity) {
             updatableEntity.setUpdatedAt(Instant.now());
         }
