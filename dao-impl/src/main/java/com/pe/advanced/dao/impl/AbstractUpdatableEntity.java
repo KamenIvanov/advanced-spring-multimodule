@@ -13,12 +13,11 @@ public abstract class AbstractUpdatableEntity extends AbstractCreatableEntity {
     private Instant updatedAt;
 
     protected AbstractUpdatableEntity() {
-      this.updatedAt = Instant.now();
+      // POJO
     }
 
     protected AbstractUpdatableEntity(UUID id) {
         super(id);
-        this.updatedAt = Instant.now();
     }
 
     public Instant getUpdatedAt() {
