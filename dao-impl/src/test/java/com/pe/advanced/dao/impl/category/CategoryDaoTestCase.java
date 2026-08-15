@@ -29,8 +29,6 @@ class CategoryDaoTestCase extends AbstractSearchableTestCase<UUID, Category, Cat
     @Override
     public Category createDomain() {
         final var category = new Category();
-        category.setCreatedAt(Instant.now());
-        category.setUpdatedAt(Instant.now());
         category.setCreatedById(UUID.randomUUID());
         category.setUpdatedById(UUID.randomUUID());
         category.setName("Simple Category name");

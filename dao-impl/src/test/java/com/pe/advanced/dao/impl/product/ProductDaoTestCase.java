@@ -36,8 +36,6 @@ class ProductDaoTestCase extends AbstractSearchableTestCase<UUID, Product, Produ
     @Override
     public Product createDomain() {
         final var product = new Product();
-        product.setCreatedAt(Instant.now());
-        product.setUpdatedAt(Instant.now());
         product.setCreatedById(UUID.randomUUID());
         product.setUpdatedById(UUID.randomUUID());
         product.setName("Simple product name");
