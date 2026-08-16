@@ -88,14 +88,15 @@ public abstract class CrudDaoImpl<
         repository.findById(domain.getId()).ifPresent(repository::delete);
     }
 
-    protected void preCreate(AbstractCreatableEntity entity) {
-        entity.setCreatedAt(Instant.now());
+    protected void preCreate(Entity entity) {
+        final var now = Instant.now();
+        entity.setCreatedAt(now);
         if (entity instanceof AbstractUpdatableEntity updatableEntity) {
-            updatableEntity.setUpdatedAt(entity.getCreatedAt());
+            updatableEntity.setUpdatedAt(now);
         }
     }
 
-    protected void preUpdate(AbstractCreatableEntity entity) {
+    protected void preUpdate(Entity entity) {
         if (entity instanceof AbstractUpdatableEntity updatableEntity) {
             updatableEntity.setUpdatedAt(Instant.now());
         }
