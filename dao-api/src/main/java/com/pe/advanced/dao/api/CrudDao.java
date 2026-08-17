@@ -1,6 +1,8 @@
 package com.pe.advanced.dao.api;
 
-public interface CrudDao<IdType, Type> {
+import com.pe.advanced.domain.AbstractCreatable;
+
+public interface CrudDao<IdType, Type extends AbstractCreatable<IdType>> {
 
     /**
      * Creates the entity in the database.

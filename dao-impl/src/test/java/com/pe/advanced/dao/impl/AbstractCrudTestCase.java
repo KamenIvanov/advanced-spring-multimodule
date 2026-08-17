@@ -133,7 +133,7 @@ public abstract class AbstractCrudTestCase<
 
     /**
      * Hook that lets concrete test cases mutate a persisted domain before it is passed to
-     * {@link CrudDao#update(Object)}. The default implementation returns the domain unchanged,
+     * {@link CrudDao#update(AbstractCreatable)}. The default implementation returns the domain unchanged,
      * which still exercises the update path end-to-end.
      *
      * @param domain the persisted domain to be updated
