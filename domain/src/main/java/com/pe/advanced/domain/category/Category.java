@@ -10,6 +10,10 @@ public class Category extends AbstractAuditable<UUID> {
     private String name;
     private boolean active;
 
+    public Category() {
+       // POJO
+    }
+
     public Category(UUID id, Instant createdAt, Instant updatedAt) {
         super(id, createdAt, updatedAt);
     }
