@@ -3,6 +3,7 @@ package com.pe.advanced.domain.product;
 import com.pe.advanced.domain.AbstractAuditable;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -16,8 +17,8 @@ public class Product extends AbstractAuditable<UUID> {
     // 1-1 relationship (Lifecycle bound)
     private ProductSpecification specification;
 
-    public Product() {
-        // POJO
+    public Product(UUID id, Instant createdAt, Instant updatedAt) {
+        super(id, createdAt, updatedAt);
     }
 
     public Product(UUID id, UUID createdById, UUID updatedById, String name, String sku, BigDecimal price, ProductSpecification specification) {

@@ -4,7 +4,7 @@ import java.time.Instant;
 
 public abstract class AbstractUpdatable<IdType> extends AbstractCreatable<IdType> {
 
-    private Instant updatedAt;
+    private final Instant updatedAt;
 
     protected AbstractUpdatable() {
         this.updatedAt = Instant.now();
@@ -12,14 +12,15 @@ public abstract class AbstractUpdatable<IdType> extends AbstractCreatable<IdType
 
     protected AbstractUpdatable(IdType id) {
         super(id);
-        this.updatedAt = Instant.now();
+        this.updatedAt = super.getCreatedAt();
+    }
+
+    protected AbstractUpdatable(IdType id, Instant createdAt, Instant updatedAt) {
+        super(id, createdAt);
+        this.updatedAt = updatedAt;
     }
 
     public Instant getUpdatedAt() {
         return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

@@ -2,6 +2,7 @@ package com.pe.advanced.domain.category;
 
 import com.pe.advanced.domain.AbstractAuditable;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class Category extends AbstractAuditable<UUID> {
@@ -9,8 +10,8 @@ public class Category extends AbstractAuditable<UUID> {
     private String name;
     private boolean active;
 
-    public Category() {
-        // POJO
+    public Category(UUID id, Instant createdAt, Instant updatedAt) {
+        super(id, createdAt, updatedAt);
     }
 
     public String getName() {

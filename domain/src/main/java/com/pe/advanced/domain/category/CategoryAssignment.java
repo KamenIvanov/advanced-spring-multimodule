@@ -2,6 +2,7 @@ package com.pe.advanced.domain.category;
 
 import com.pe.advanced.domain.AbstractCreatable;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class CategoryAssignment extends AbstractCreatable<UUID> {
@@ -10,8 +11,8 @@ public class CategoryAssignment extends AbstractCreatable<UUID> {
     private UUID categoryId;
     private UUID assignedById;
 
-    public CategoryAssignment() {
-        // POJO
+    public CategoryAssignment(UUID id, Instant createdAt) {
+        super(id, createdAt);
     }
 
     public UUID getProductId() {

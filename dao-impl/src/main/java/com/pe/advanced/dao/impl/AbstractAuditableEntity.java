@@ -1,25 +1,25 @@
-package com.pe.advanced.domain;
+package com.pe.advanced.dao.impl;
 
-import java.time.Instant;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+
 import java.util.UUID;
 
-public abstract class AbstractAuditable<IdType> extends AbstractUpdatable<IdType> {
+@MappedSuperclass
+public abstract class AbstractAuditableEntity extends AbstractUpdatableEntity {
 
+    @Column(name = "created_by_id", nullable = false)
     private UUID createdById;
+
+    @Column(name = "updated_by_id", nullable = false)
     private UUID updatedById;
 
-    protected AbstractAuditable() {
+    protected AbstractAuditableEntity() {
         // POJO
     }
 
-    protected AbstractAuditable(IdType id, Instant createdAt, Instant updatedAt) {
-        super(id, createdAt, updatedAt);
-    }
-
-    protected AbstractAuditable(IdType id, UUID createdById, UUID updatedById) {
+    protected AbstractAuditableEntity(UUID id) {
         super(id);
-        this.createdById = createdById;
-        this.updatedById = updatedById;
     }
 
     public UUID getCreatedById() {
