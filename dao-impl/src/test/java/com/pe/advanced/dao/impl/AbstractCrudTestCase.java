@@ -21,8 +21,7 @@ public abstract class AbstractCrudTestCase<
         final D dbEntity = getDao().loadById(expectedEntity.getId());
         assertNotNull(dbEntity, "missing entity");
         assertEquals(expectedEntity.getId(), dbEntity.getId());
-        final D reloaded = getDao().loadById(expectedEntity.getId());
-        getAsserter().assertDeepEquals(reloaded, dbEntity);
+        getAsserter().assertDeepEquals(expectedEntity, dbEntity);
     }
 
     @Test
@@ -34,7 +33,6 @@ public abstract class AbstractCrudTestCase<
     @Test
     void testCreateExisting() {
         final D existing = runSave();
-
         final var ex = Assertions.assertThrows(IllegalArgumentException.class, () -> getDao().create(existing));
         Assertions.assertEquals("Entity existing!", ex.getMessage());
     }
@@ -42,7 +40,6 @@ public abstract class AbstractCrudTestCase<
     @Test
     void testUpdate() {
         final D saved = runSave();
-
         final D updated = getDao().update(updateDomain(saved));
         assertNotNull(updated, "missing entity");
         assertEquals(saved.getId(), updated.getId());
@@ -76,7 +73,6 @@ public abstract class AbstractCrudTestCase<
     @Test
     protected void testDelete() {
         final D entity = runSave();
-
         final D savedEntity = getDao().loadById(entity.getId());
         assertNotNull(savedEntity, "entity is missing");
         getDao().delete(savedEntity);
