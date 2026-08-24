@@ -17,7 +17,6 @@ public class ProductSpecificationAsserter extends AbstractUpdatableDeepEqualsAss
     public void assertDeepEquals(ProductSpecification expected, ProductSpecification actual) {
         super.assertDeepEquals(expected, actual);
 
-        assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getDimensions(), actual.getDimensions());
         assertEquals(expected.getWeight(), actual.getWeight());
     }
