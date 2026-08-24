@@ -104,8 +104,10 @@ public abstract class AbstractSearchableTestCase<
             runSave(createDomainWithUniqueData());
         }
 
-        final var results = getDao().search(null);
-        assertEquals(5, results.elements().size());
+        final ResultPage<Domain> result = getDao().search(null);
+        assertEquals(1, result.totalPages());
+        assertEquals(5, result.totalHits());
+        assertEquals(5, result.elements().size());
     }
 
     protected Domain createDomainWithUniqueData() {
