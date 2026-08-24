@@ -14,6 +14,9 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+import static com.pe.advanced.dao.api.search.Paging.DEFAULT_SIZE;
+import static com.pe.advanced.dao.api.search.Paging.FIRST_PAGE;
+
 public abstract class SearchableDaoImpl<
         IdType,
         Domain extends AbstractCreatable<IdType>,
@@ -32,7 +35,9 @@ public abstract class SearchableDaoImpl<
     @Override
     public ResultPage<Domain> search(Params params) {
         final Pageable pageable = toPage(params);
-        final Specification<Entity> spec = createSpecification(params);
+        final Specification<Entity> spec = params == null
+                ? Specification.unrestricted()
+                : createSpecification(params);
         final Page<Entity> result = repository.findAll(spec, pageable);
         final List<Domain> content = result.getContent()
                 .stream()
@@ -43,6 +48,10 @@ public abstract class SearchableDaoImpl<
     }
 
     private Pageable toPage(Params criteria) {
+        if (criteria == null) {
+            return PageRequest.of(FIRST_PAGE, DEFAULT_SIZE, CREATED_AT_DESC_SORT);
+        }
+
         return PageRequest.of(
                 criteria.getPage(),
                 criteria.getSize(),

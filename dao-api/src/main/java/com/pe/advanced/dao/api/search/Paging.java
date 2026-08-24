@@ -2,8 +2,8 @@ package com.pe.advanced.dao.api.search;
 
 public class Paging {
 
-    private static final int FIRST_PAGE = 0;
-    private static final int DEFAULT_SIZE = 10;
+    public static final int FIRST_PAGE = 0;
+    public static final int DEFAULT_SIZE = 10;
 
     private int page = FIRST_PAGE;
     private int size = DEFAULT_SIZE;

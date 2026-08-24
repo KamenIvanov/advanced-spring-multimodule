@@ -100,7 +100,12 @@ public abstract class AbstractSearchableTestCase<
 
     @Test
     public void testSearchNullQuery() {
-        assertThrows(NullPointerException.class, () -> getDao().search(null));
+        for (int i = 0; i < 5; i++) {
+            runSave(createDomainWithUniqueData());
+        }
+
+        final var results = getDao().search(null);
+        assertEquals(5, results.elements().size());
     }
 
     protected Domain createDomainWithUniqueData() {
