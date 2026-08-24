@@ -17,6 +17,10 @@ public class Product extends AbstractAuditable<UUID> {
     // 1-1 relationship (Lifecycle bound)
     private ProductSpecification specification;
 
+    public Product() {
+        // POJO
+    }
+
     public Product(UUID id, Instant createdAt, Instant updatedAt) {
         super(id, createdAt, updatedAt);
     }

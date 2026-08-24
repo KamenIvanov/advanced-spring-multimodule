@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Table(name = "PRODUCTS")
 public class ProductEntity extends AbstractAuditableEntity {
 
-    @Column(name = "name", nullable = false, updatable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "sku", length = 256, nullable = false, unique = true)

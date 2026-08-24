@@ -5,10 +5,11 @@ import java.util.Objects;
 
 public abstract class AbstractCreatable<IdType> {
 
-    private IdType id;
+    private final IdType id;
     private final Instant createdAt;
 
     protected AbstractCreatable() {
+        this.id = null;
         this.createdAt = Instant.now();
     }
 
@@ -23,10 +24,6 @@ public abstract class AbstractCreatable<IdType> {
 
     public IdType getId() {
         return id;
-    }
-
-    public void setId(IdType id) {
-        this.id = id;
     }
 
     public Instant getCreatedAt() {

@@ -13,7 +13,7 @@ public abstract class AbstractUpdatableEntity extends AbstractCreatableEntity {
     private Instant updatedAt;
 
     protected AbstractUpdatableEntity() {
-      // POJO
+        // POJO
     }
 
     protected AbstractUpdatableEntity(UUID id) {

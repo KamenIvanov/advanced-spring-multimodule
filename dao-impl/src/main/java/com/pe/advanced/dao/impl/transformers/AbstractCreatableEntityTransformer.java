@@ -13,9 +13,4 @@ public abstract class AbstractCreatableEntityTransformer<S extends AbstractCreat
         source.setId(dest.getId());
         source.setCreatedAt(dest.getCreatedAt());
     }
-
-    @Override
-    public void copyToOutput(S source, D dest) {
-        dest.setId(source.getId());
-    }
 }

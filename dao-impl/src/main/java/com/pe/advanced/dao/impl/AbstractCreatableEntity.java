@@ -20,7 +20,7 @@ public abstract class AbstractCreatableEntity {
     private Instant createdAt;
 
     protected AbstractCreatableEntity() {
-       // POJO
+        // POJO
     }
 
     protected AbstractCreatableEntity(UUID id) {

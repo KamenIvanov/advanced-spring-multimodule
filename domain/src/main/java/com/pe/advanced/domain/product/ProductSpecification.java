@@ -14,6 +14,11 @@ public class ProductSpecification extends AbstractUpdatable<UUID> {
         super(id, createdAt, updatedAt);
     }
 
+    public ProductSpecification(String dimensions, double weight) {
+        this.dimensions = dimensions;
+        this.weight = weight;
+    }
+
     public ProductSpecification(UUID id, String dimensions, double weight) {
         super(id);
         this.dimensions = dimensions;
