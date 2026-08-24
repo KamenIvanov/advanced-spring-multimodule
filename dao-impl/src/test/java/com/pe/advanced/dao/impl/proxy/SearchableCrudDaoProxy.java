@@ -20,7 +20,7 @@ public abstract class SearchableCrudDaoProxy<
     }
 
     @Override
-    public ResultPage<Domain> search(Params criteria) {
-        return proxied.search(criteria);
+    public ResultPage<Domain> search(Params params) {
+        return proxied.search(params);
     }
 }

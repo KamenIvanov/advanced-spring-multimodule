@@ -99,7 +99,7 @@ public abstract class AbstractSearchableTestCase<
     }
 
     @Test
-    public void testSearchNullQuery() {
+    public void testSearchNullParams() {
         for (int i = 0; i < 5; i++) {
             runSave(createDomainWithUniqueData());
         }
