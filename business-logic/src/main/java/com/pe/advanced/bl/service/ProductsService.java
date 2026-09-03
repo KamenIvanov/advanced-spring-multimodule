@@ -14,5 +14,5 @@ public interface ProductsService extends CrudService<NewProduct, UpdateProduct, 
 
     ResultPage<Product> getProducts(int page, int size, ProductSort sort, SortDirection direction);
 
-    void changeStatus(ProductStatus newStatus, UUID requesterId);
+    void changeStatus(UUID id, ProductStatus newStatus, UUID requesterId);
 }

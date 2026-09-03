@@ -38,12 +38,20 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
     }
 
     @Override
-    public void changeStatus(ProductStatus newStatus, UUID requesterId) {
+    public void changeStatus(UUID id, ProductStatus newStatus, UUID requesterId) {
         if (requesterId == null) {
             throw new AuthorizationException(UNAUTHORIZED);
         }
 
+        final var product = loadOrThrowNotFound(() -> getDao().loadById(id));
 
+        // Can the requester modify the entity?
+        authorize(product, requesterId);
+
+        product.transitionTo(newStatus);
+        product.setUpdatedById(requesterId);
+
+        getDao().update(product);
     }
 
     @Override
