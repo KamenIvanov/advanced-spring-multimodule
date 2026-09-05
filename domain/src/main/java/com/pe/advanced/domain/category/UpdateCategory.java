@@ -2,21 +2,21 @@ package com.pe.advanced.domain.category;
 
 public class UpdateCategory {
 
-    private boolean active;
+    private String name;
 
     public UpdateCategory() {
         // POJO
     }
 
-    public UpdateCategory(boolean active) {
-        this.active = active;
+    public UpdateCategory(String name) {
+        this.name = name;
     }
 
-    public boolean isActive() {
-        return active;
+    public String getName() {
+        return name;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setName(String name) {
+        this.name = name;
     }
 }

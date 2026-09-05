@@ -13,21 +13,20 @@ public class NewCategoryTransformer extends AbstractTransformer<NewCategory, Cat
     }
 
     @Override
-    public void copyToOutput(NewCategory dto, Category product) {
-        super.copyToOutput(dto, product);
+    public void copyToOutput(NewCategory dto, Category category) {
+        super.copyToOutput(dto, category);
 
-        product.setName(dto.getName());
-        product.setActive(dto.isActive());
+        category.setName(dto.getName());
     }
 
     @Override
-    public Category createOutput(NewCategory product) {
-        if (product == null) {
+    public Category createOutput(NewCategory newCategory) {
+        if (newCategory == null) {
             return null;
         }
 
         final var dto = new Category();
-        copyToOutput(product, dto);
+        copyToOutput(newCategory, dto);
         return dto;
     }
 }

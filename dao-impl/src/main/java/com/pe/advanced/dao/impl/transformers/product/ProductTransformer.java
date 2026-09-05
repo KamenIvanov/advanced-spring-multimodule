@@ -29,7 +29,6 @@ public class ProductTransformer extends AbstractAuditableEntityTransformer<Produ
 
         dest.setName(source.getName());
         dest.setSku(source.getSku());
-        dest.transitionTo(ProductTypeTransformer.instance.createOutput(source.getStatus()));
         dest.setPrice(source.getPrice());
         dest.setSpecification(ProductSpecificationTransformer.instance.createOutput(source.getSpecification()));
     }
@@ -51,7 +50,12 @@ public class ProductTransformer extends AbstractAuditableEntityTransformer<Produ
             return null;
         }
 
-        final var product = new Product(entity.getId(), entity.getCreatedAt(), entity.getUpdatedAt());
+        final var product = new Product(
+                entity.getId(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                ProductTypeTransformer.instance.createOutput(entity.getStatus())
+        );
         copyToOutput(entity, product);
         return product;
     }

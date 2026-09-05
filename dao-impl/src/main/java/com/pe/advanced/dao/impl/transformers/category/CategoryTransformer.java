@@ -17,7 +17,7 @@ public class CategoryTransformer extends AbstractAuditableEntityTransformer<Cate
         super.copyToInput(dest, source);
 
         source.setName(dest.getName());
-        source.setActive(dest.isActive());
+        source.setStatus(CategoryStatusTransformer.instance.createInput(dest.getStatus()));
     }
 
     @Override
@@ -25,7 +25,6 @@ public class CategoryTransformer extends AbstractAuditableEntityTransformer<Cate
         super.copyToOutput(source, dest);
 
         dest.setName(source.getName());
-        dest.setActive(source.isActive());
     }
 
     @Override
@@ -45,7 +44,12 @@ public class CategoryTransformer extends AbstractAuditableEntityTransformer<Cate
             return null;
         }
 
-        final var category = new Category(entity.getId(), entity.getCreatedAt(), entity.getUpdatedAt());
+        final var category = new Category(
+                entity.getId(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                CategoryStatusTransformer.instance.createOutput(entity.getStatus())
+        );
         copyToOutput(entity, category);
         return category;
     }

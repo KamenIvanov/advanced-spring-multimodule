@@ -40,7 +40,6 @@ class ProductDaoTestCase extends AbstractSearchableTestCase<UUID, Product, Produ
         product.setUpdatedById(UUID.randomUUID());
         product.setName("Simple product name");
         product.setSku(UUID.randomUUID().toString());
-        product.transitionTo(ProductStatus.ACTIVE);
         product.setPrice(BigDecimal.TWO);
         product.setSpecification(new ProductSpecification("10x20x5", 3.50));
         return product;

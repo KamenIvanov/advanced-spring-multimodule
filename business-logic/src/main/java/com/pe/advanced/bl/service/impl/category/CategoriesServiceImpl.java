@@ -10,6 +10,7 @@ import com.pe.advanced.dao.api.category.CategorySort;
 import com.pe.advanced.dao.api.search.ResultPage;
 import com.pe.advanced.dao.api.search.SortDirection;
 import com.pe.advanced.domain.category.Category;
+import com.pe.advanced.domain.category.CategoryStatus;
 import com.pe.advanced.domain.category.NewCategory;
 import com.pe.advanced.domain.category.UpdateCategory;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
@@ -37,9 +38,26 @@ public class CategoriesServiceImpl extends AbstractCrudService<NewCategory, Upda
     }
 
     @Override
-    protected void preProcessNewEntity(Category product, UUID requesterId) {
-        product.setCreatedById(requesterId);
-        product.setUpdatedById(requesterId);
+    public void changeStatus(UUID id, CategoryStatus newStatus, UUID requesterId) {
+        if (requesterId == null) {
+            throw new AuthorizationException(UNAUTHORIZED);
+        }
+
+        final var category = loadOrThrowNotFound(() -> getDao().loadById(id));
+
+        // Can the requester modify the entity?
+        authorize(category, requesterId);
+
+        category.transitionTo(newStatus);
+        category.setUpdatedById(requesterId);
+
+        getDao().update(category);
+    }
+
+    @Override
+    protected void preProcessNewEntity(Category category, UUID requesterId) {
+        category.setCreatedById(requesterId);
+        category.setUpdatedById(requesterId);
     }
 
     @Override
