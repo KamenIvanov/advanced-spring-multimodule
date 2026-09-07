@@ -55,12 +55,6 @@ public class CategoriesServiceImpl extends AbstractCrudService<NewCategory, Upda
     }
 
     @Override
-    protected void preProcessNewEntity(Category category, UUID requesterId) {
-        category.setCreatedById(requesterId);
-        category.setUpdatedById(requesterId);
-    }
-
-    @Override
     protected Transformer<NewCategory, Category> getCreateTransformer() {
         return NewCategoryTransformer.instance;
     }

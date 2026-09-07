@@ -55,12 +55,6 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
     }
 
     @Override
-    protected void preProcessNewEntity(Product product, UUID requesterId) {
-        product.setCreatedById(requesterId);
-        product.setUpdatedById(requesterId);
-    }
-
-    @Override
     protected Transformer<NewProduct, Product> getCreateTransformer() {
         return NewProductTransformer.instance;
     }

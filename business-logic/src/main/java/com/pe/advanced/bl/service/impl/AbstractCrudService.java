@@ -31,7 +31,9 @@ public abstract class AbstractCrudService<
         }
 
         final var domain = getCreateTransformer().createOutput(newDomain);
-        preProcessNewEntity(domain, requesterId);
+        domain.setCreatedById(requesterId);
+        domain.setUpdatedById(requesterId);
+
         return dao.create(domain);
     }
 
@@ -87,16 +89,6 @@ public abstract class AbstractCrudService<
 
     protected Dao getDao() {
         return dao;
-    }
-
-    /**
-     * This will be called right before the entity validation and persist to database occurs.
-     *
-     * @param domain      the new entity
-     * @param requesterId the requester identification
-     */
-    protected void preProcessNewEntity(Domain domain, UUID requesterId) {
-        // empty by default
     }
 
     protected void authorizeDelete(Domain domain, UUID requesterId) {
