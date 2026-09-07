@@ -18,6 +18,6 @@ public class CategoryAsserter extends AbstractAuditableDeepEqualsAsserter<Catego
         super.assertDeepEquals(expected, actual);
 
         assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.isActive(), actual.isActive());
+        assertEquals(expected.getStatus(), actual.getStatus());
     }
 }

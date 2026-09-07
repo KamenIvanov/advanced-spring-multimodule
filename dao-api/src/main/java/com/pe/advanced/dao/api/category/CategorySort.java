@@ -2,7 +2,7 @@ package com.pe.advanced.dao.api.category;
 
 import com.pe.advanced.dao.api.search.SortBy;
 
-public enum CategorySortByFields implements SortBy {
+public enum CategorySort implements SortBy {
 
     NAME("name"),
     CREATED_AT("createdAt"),
@@ -10,7 +10,7 @@ public enum CategorySortByFields implements SortBy {
 
     private final String value;
 
-    CategorySortByFields(String value) {
+    CategorySort(String value) {
         this.value = value;
     }
 

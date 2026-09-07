@@ -8,14 +8,15 @@ import java.util.UUID;
 public class Category extends AbstractAuditable<UUID> {
 
     private String name;
-    private boolean active;
+    private CategoryStatus status = CategoryStatus.INACTIVE;
 
     public Category() {
-       // POJO
+        // POJO
     }
 
-    public Category(UUID id, Instant createdAt, Instant updatedAt) {
+    public Category(UUID id, Instant createdAt, Instant updatedAt, CategoryStatus status) {
         super(id, createdAt, updatedAt);
+        this.status = status;
     }
 
     public String getName() {
@@ -26,11 +27,14 @@ public class Category extends AbstractAuditable<UUID> {
         this.name = name;
     }
 
-    public boolean isActive() {
-        return active;
+    public CategoryStatus getStatus() {
+        return status;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void transitionTo(CategoryStatus nextStatus) {
+        if (!this.status.canTransitionTo(nextStatus)) {
+            throw new IllegalStateException("Business rule violated: Cannot transition from " + this.status + " to " + nextStatus);
+        }
+        this.status = nextStatus;
     }
 }

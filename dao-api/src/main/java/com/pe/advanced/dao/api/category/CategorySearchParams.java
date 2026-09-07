@@ -2,7 +2,7 @@ package com.pe.advanced.dao.api.category;
 
 import com.pe.advanced.dao.api.search.AbstractParams;
 
-public class CategorySearchParams extends AbstractParams<CategorySortByFields> {
+public class CategorySearchParams extends AbstractParams<CategorySort> {
 
     private String name;
     private Boolean active;

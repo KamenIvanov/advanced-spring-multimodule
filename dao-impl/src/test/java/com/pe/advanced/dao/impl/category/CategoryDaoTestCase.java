@@ -8,7 +8,6 @@ import com.pe.advanced.domain.asserter.category.CategoryAsserter;
 import com.pe.advanced.domain.category.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.Instant;
 import java.util.UUID;
 
 class CategoryDaoTestCase extends AbstractSearchableTestCase<UUID, Category, CategoryDao, CategorySearchParams> {
@@ -32,7 +31,6 @@ class CategoryDaoTestCase extends AbstractSearchableTestCase<UUID, Category, Cat
         category.setCreatedById(UUID.randomUUID());
         category.setUpdatedById(UUID.randomUUID());
         category.setName("Simple Category name");
-        category.setActive(true);
         return category;
     }
 

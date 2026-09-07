@@ -21,8 +21,9 @@ public class Product extends AbstractAuditable<UUID> {
         // POJO
     }
 
-    public Product(UUID id, Instant createdAt, Instant updatedAt) {
+    public Product(UUID id, Instant createdAt, Instant updatedAt, ProductStatus status) {
         super(id, createdAt, updatedAt);
+        this.status = status;
     }
 
     public Product(UUID id, UUID createdById, UUID updatedById, String name, String sku, BigDecimal price, ProductSpecification specification) {

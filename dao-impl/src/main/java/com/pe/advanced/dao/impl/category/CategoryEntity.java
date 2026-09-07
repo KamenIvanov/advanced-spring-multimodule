@@ -1,9 +1,7 @@
 package com.pe.advanced.dao.impl.category;
 
 import com.pe.advanced.dao.impl.AbstractAuditableEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "CATEGORIES")
@@ -12,8 +10,9 @@ public class CategoryEntity extends AbstractAuditableEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "active", nullable = false)
-    private boolean active;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private CategoryStatusEntity status;
 
     public CategoryEntity() {
         // POJO
@@ -27,11 +26,11 @@ public class CategoryEntity extends AbstractAuditableEntity {
         this.name = name;
     }
 
-    public boolean isActive() {
-        return active;
+    public CategoryStatusEntity getStatus() {
+        return status;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setStatus(CategoryStatusEntity active) {
+        this.status = active;
     }
 }
