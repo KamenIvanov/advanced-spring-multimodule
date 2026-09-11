@@ -40,7 +40,7 @@ class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<Category, Ne
 
     @Test
     void update_ShouldMapNameThroughUpdateCategoryTransformer() {
-        final Category existing = persistedCategory(requesterId, CategoryStatus.INACTIVE);
+        final Category existing = persistedCategory(UUID.randomUUID(), requesterId, CategoryStatus.INACTIVE);
         final UpdateCategory updateDto = createUpdateDomain();
 
         when(categoryDao.loadById(existing.getId())).thenReturn(existing);
@@ -66,7 +66,7 @@ class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<Category, Ne
 
     @Test
     void changeStatus_WhenRequesterIsNotOwner_ShouldThrowAuthorizationExceptionAndNeverPersist() {
-        final Category existing = persistedCategory(alternativeRequesterId, CategoryStatus.INACTIVE);
+        final Category existing = persistedCategory(UUID.randomUUID(), alternativeRequesterId, CategoryStatus.INACTIVE);
         when(categoryDao.loadById(existing.getId())).thenReturn(existing);
         assertThrows(AuthorizationException.class, () -> categoriesService.changeStatus(existing.getId(), CategoryStatus.ACTIVE, requesterId));
         verify(categoryDao, never()).update(any());
@@ -74,7 +74,7 @@ class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<Category, Ne
 
     @Test
     void changeStatus_WhenTransitionIsValid_ShouldPersistNewStatus() {
-        final Category existing = persistedCategory(requesterId, CategoryStatus.INACTIVE);
+        final Category existing = persistedCategory(UUID.randomUUID(), requesterId, CategoryStatus.INACTIVE);
         when(categoryDao.loadById(existing.getId())).thenReturn(existing);
         when(categoryDao.update(existing)).thenReturn(existing);
 
@@ -86,7 +86,7 @@ class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<Category, Ne
 
     @Test
     void changeStatus_WhenTransitionIsIllegal_ShouldThrowAndNeverPersist() {
-        final Category existing = persistedCategory(requesterId, CategoryStatus.ACTIVE);
+        final Category existing = persistedCategory(UUID.randomUUID(), requesterId, CategoryStatus.ACTIVE);
         when(categoryDao.loadById(existing.getId())).thenReturn(existing);
         assertThrows(IllegalStateException.class, () -> categoriesService.changeStatus(existing.getId(), CategoryStatus.INACTIVE, requesterId));
         verify(categoryDao, never()).update(any());
@@ -124,14 +124,19 @@ class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<Category, Ne
                 transientCategory.getUpdatedAt(),
                 transientCategory.getStatus()
         );
-        persisted.setName(transientCategory.getName());
         persisted.setCreatedById(transientCategory.getCreatedById());
         persisted.setUpdatedById(transientCategory.getUpdatedById());
+        persisted.setName(transientCategory.getName());
         return persisted;
     }
 
-    private Category persistedCategory(UUID ownerId, CategoryStatus status) {
-        final var category = new Category(UUID.randomUUID(), Instant.now(), Instant.now(), status);
+    @Override
+    protected Category buildPersistedEntity(UUID id, UUID ownerId) {
+        return persistedCategory(id, ownerId, CategoryStatus.INACTIVE);
+    }
+
+    private Category persistedCategory(UUID id, UUID ownerId, CategoryStatus status) {
+        final var category = new Category(id, Instant.now(), Instant.now(), status);
         category.setName("Existing Category");
         category.setCreatedById(ownerId);
         category.setUpdatedById(ownerId);

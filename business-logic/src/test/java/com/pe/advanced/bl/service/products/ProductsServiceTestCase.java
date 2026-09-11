@@ -40,7 +40,7 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<Product, NewPr
 
     @Test
     void update_ShouldMapAllFieldsThroughUpdateProductTransformer() {
-        final Product existing = persistedProduct(requesterId, ProductStatus.DRAFT);
+        final Product existing = persistedProduct(UUID.randomUUID(), requesterId, ProductStatus.DRAFT);
         final UpdateProduct updateDto = createUpdateDomain();
 
         when(productDao.loadById(existing.getId())).thenReturn(existing);
@@ -68,7 +68,7 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<Product, NewPr
 
     @Test
     void changeStatus_WhenRequesterIsNotOwner_ShouldThrowAuthorizationExceptionAndNeverPersist() {
-        final Product existing = persistedProduct(alternativeRequesterId, ProductStatus.DRAFT);
+        final Product existing = persistedProduct(UUID.randomUUID(), alternativeRequesterId, ProductStatus.DRAFT);
         when(productDao.loadById(existing.getId())).thenReturn(existing);
         assertThrows(AuthorizationException.class, () -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId));
         verify(productDao, never()).update(any());
@@ -76,7 +76,7 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<Product, NewPr
 
     @Test
     void changeStatus_WhenTransitionIsValid_ShouldPersistNewStatus() {
-        final Product existing = persistedProduct(requesterId, ProductStatus.DRAFT);
+        final Product existing = persistedProduct(UUID.randomUUID(), requesterId, ProductStatus.DRAFT);
         when(productDao.loadById(existing.getId())).thenReturn(existing);
         when(productDao.update(existing)).thenReturn(existing);
 
@@ -87,7 +87,7 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<Product, NewPr
 
     @Test
     void changeStatus_WhenTransitionIsIllegal_ShouldThrowAndNeverPersist() {
-        final Product existing = persistedProduct(requesterId, ProductStatus.ARCHIVED);
+        final Product existing = persistedProduct(UUID.randomUUID(), requesterId, ProductStatus.ARCHIVED);
         when(productDao.loadById(existing.getId())).thenReturn(existing);
         assertThrows(IllegalStateException.class, () -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId));
         verify(productDao, never()).update(any());
@@ -107,7 +107,7 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<Product, NewPr
 
     @Test
     void update_WhenSpecificationAlreadyExists_ShouldMutateInPlaceRatherThanReplace() {
-        final Product existing = persistedProduct(requesterId, ProductStatus.DRAFT);
+        final Product existing = persistedProduct(UUID.randomUUID(), requesterId, ProductStatus.DRAFT);
         existing.setSpecification(new ProductSpecification("10x10x10cm", 450));
         final ProductSpecification originalSpecification = existing.getSpecification();
 
@@ -170,8 +170,13 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<Product, NewPr
         );
     }
 
-    private Product persistedProduct(UUID ownerId, ProductStatus status) {
-        final var product = new Product(UUID.randomUUID(), Instant.now(), Instant.now(), status);
+    @Override
+    protected Product buildPersistedEntity(UUID id, UUID ownerId) {
+        return persistedProduct(id, ownerId, ProductStatus.DRAFT);
+    }
+
+    private Product persistedProduct(UUID id, UUID ownerId, ProductStatus status) {
+        final var product = new Product(id, Instant.now(), Instant.now(), status);
         product.setName("Existing Product");
         product.setSku("EXISTING-SKU");
         product.setPrice(BigDecimal.TEN);

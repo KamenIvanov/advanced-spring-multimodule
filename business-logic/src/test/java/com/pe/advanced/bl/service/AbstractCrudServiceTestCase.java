@@ -74,7 +74,7 @@ public abstract class AbstractCrudServiceTestCase<
 
     @Test
     void update_WhenRequesterIsNotOwner_ShouldThrowAuthorizationExceptionAndNeverPersist() {
-        final Domain existingDomain = createPersistedEntity(alternativeRequesterId);
+        final Domain existingDomain = persistedEntity(alternativeRequesterId);
         final UpdateDomain updateDomain = createUpdateDomain();
 
         when(getMockDao().loadById(existingDomain.getId())).thenReturn(existingDomain);
@@ -84,7 +84,7 @@ public abstract class AbstractCrudServiceTestCase<
 
     @Test
     void update_WhenRequesterIsOwner_ShouldPersistWithUpdatedByChangedAndCreatedByPreserved() {
-        final Domain existingDomain = createPersistedEntity(requesterId);
+        final Domain existingDomain = persistedEntity(requesterId);
         final UpdateDomain updateDomain = createUpdateDomain();
 
         when(getMockDao().loadById(existingDomain.getId())).thenReturn(existingDomain);
@@ -120,7 +120,7 @@ public abstract class AbstractCrudServiceTestCase<
 
     @Test
     void loadById_WhenRequesterIsOwner_ShouldReturnDomain() {
-        final Domain existingDomain = createPersistedEntity(requesterId);
+        final Domain existingDomain = persistedEntity(requesterId);
         when(getMockDao().loadById(existingDomain.getId())).thenReturn(existingDomain);
 
         final Domain result = getService().loadById(existingDomain.getId(), requesterId);
@@ -130,7 +130,7 @@ public abstract class AbstractCrudServiceTestCase<
 
     @Test
     void loadById_WhenRequesterIsNotOwner_ShouldThrowAuthorizationException() {
-        final Domain existingEntity = createPersistedEntity(alternativeRequesterId);
+        final Domain existingEntity = persistedEntity(alternativeRequesterId);
         when(getMockDao().loadById(existingEntity.getId())).thenReturn(existingEntity);
         assertThrows(AuthorizationException.class, () -> getService().loadById(existingEntity.getId(), requesterId));
     }
@@ -154,7 +154,7 @@ public abstract class AbstractCrudServiceTestCase<
 
     @Test
     void delete_WhenRequesterIsOwner_ShouldDeleteEntity() {
-        final Domain existingEntity = createPersistedEntity(requesterId);
+        final Domain existingEntity = persistedEntity(requesterId);
         when(getMockDao().loadById(existingEntity.getId())).thenReturn(existingEntity);
 
         getService().delete(existingEntity.getId(), requesterId);
@@ -163,11 +163,15 @@ public abstract class AbstractCrudServiceTestCase<
 
     @Test
     void delete_WhenRequesterIsNotOwner_ShouldThrowAuthorizationExceptionAndNeverDelete() {
-        final Domain existingEntity = createPersistedEntity(alternativeRequesterId);
+        final Domain existingEntity = persistedEntity(alternativeRequesterId);
         when(getMockDao().loadById(existingEntity.getId())).thenReturn(existingEntity);
 
         assertThrows(AuthorizationException.class, () -> getService().delete(existingEntity.getId(), requesterId));
         verify(getMockDao(), never()).delete(any());
+    }
+
+    private Domain persistedEntity(UUID ownerId) {
+        return buildPersistedEntity(UUID.randomUUID(), ownerId);
     }
 
     protected abstract Service getService();
@@ -186,20 +190,10 @@ public abstract class AbstractCrudServiceTestCase<
      */
     protected abstract Domain withId(Domain transientDomain, UUID id);
 
-    private Domain createPersistedEntity(UUID ownerId) {
-        final UUID entityId = UUID.randomUUID();
-
-        when(getMockDao().create(any())).thenAnswer(invocation -> withId(invocation.getArgument(0), entityId));
-
-        final Domain persisted = getService().create(createValidNewDomain(), ownerId);
-
-        assertNotNull(persisted);
-        assertEquals(entityId, persisted.getId());
-        assertEquals(ownerId, persisted.getCreatedById());
-
-        // Downstream tests verify their own dao interactions; don't let this setup call count.
-        clearInvocations(getMockDao());
-
-        return persisted;
-    }
+    /**
+     * Builds an already-persisted domain instance directly, without routing through
+     * the service's create() path. Fixture setup should not depend on production
+     * code under test elsewhere in the suite.
+     */
+    protected abstract Domain buildPersistedEntity(UUID id, UUID ownerId);
 }
