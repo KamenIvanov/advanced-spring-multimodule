@@ -187,6 +187,10 @@ public abstract class AbstractCrudServiceTestCase<
      * setId(). A real DAO returns a new persisted instance rather than mutating the
      * transient one it was given, and the mock must model that honestly rather than
      * faking mutation on an object that structurally cannot be mutated.
+     * <p>
+     * Used exclusively by the create() ownership-stamping test - fixtures for
+     * update/delete/loadById use buildPersistedEntity() instead, since those tests
+     * shouldn't depend on create() working correctly.
      */
     protected abstract Domain withId(Domain transientDomain, UUID id);
 
