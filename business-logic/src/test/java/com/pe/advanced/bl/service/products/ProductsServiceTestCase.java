@@ -18,7 +18,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ProductsServiceTestCase extends AbstractCrudServiceTestCase<Product, NewProduct, UpdateProduct, ProductDao, ProductsService> {
+class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, UpdateProduct, Product, ProductDao, ProductsService> {
 
     @Mock
     private ProductDao productDao;

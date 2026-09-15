@@ -20,7 +20,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<Category, NewCategory, UpdateCategory, CategoryDao, CategoriesService> {
+class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<NewCategory, UpdateCategory, Category, CategoryDao, CategoriesService> {
 
     @Mock
     private CategoryDao categoryDao;

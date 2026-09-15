@@ -13,9 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public abstract class AbstractCrudServiceTestCase<
-        Domain extends AbstractAuditable<UUID>,
         NewDomain,
         UpdateDomain,
+        Domain extends AbstractAuditable<UUID>,
         Dao extends CrudDao<UUID, Domain>,
         Service extends CrudService<NewDomain, UpdateDomain, Domain>
         > extends AbstractServiceTestCase {
