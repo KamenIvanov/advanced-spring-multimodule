@@ -38,6 +38,7 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
     }
 
     @Override
+    @Transactional
     public void changeStatus(UUID id, ProductStatus newStatus, UUID requesterId) {
         if (requesterId == null) {
             throw new AuthorizationException(UNAUTHORIZED);
@@ -47,6 +48,10 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
 
         // Can the requester modify the entity?
         authorize(product, requesterId);
+
+        if (product.getStatus() == newStatus) {
+            return;
+        }
 
         product.transitionTo(newStatus);
         product.setUpdatedById(requesterId);

@@ -38,6 +38,7 @@ public class CategoriesServiceImpl extends AbstractCrudService<NewCategory, Upda
     }
 
     @Override
+    @Transactional
     public void changeStatus(UUID id, CategoryStatus newStatus, UUID requesterId) {
         if (requesterId == null) {
             throw new AuthorizationException(UNAUTHORIZED);
@@ -47,6 +48,10 @@ public class CategoriesServiceImpl extends AbstractCrudService<NewCategory, Upda
 
         // Can the requester modify the entity?
         authorize(category, requesterId);
+
+        if (category.getStatus() == newStatus) {
+            return;
+        }
 
         category.transitionTo(newStatus);
         category.setUpdatedById(requesterId);

@@ -94,6 +94,29 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, Up
     }
 
     @Test
+    void changeStatus_WhenNewStatusEqualsCurrentStatus_ShouldBeANoOp() {
+        final Product existing = persistedProduct(UUID.randomUUID(), requesterId, ProductStatus.ACTIVE);
+        when(productDao.loadById(existing.getId())).thenReturn(existing);
+
+        assertDoesNotThrow(() -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId));
+
+        assertEquals(ProductStatus.ACTIVE, existing.getStatus());
+        verify(productDao, times(1)).loadById(existing.getId());
+        verify(productDao, never()).update(any());
+    }
+
+    @Test
+    void changeStatus_WhenRequesterIsNotOwnerAndStatusIsUnchanged_ShouldStillThrowAuthorizationException() {
+        final Product existing = persistedProduct(UUID.randomUUID(), alternativeRequesterId, ProductStatus.ACTIVE);
+        when(productDao.loadById(existing.getId())).thenReturn(existing);
+
+        // The same-status short-circuit must not bypass the ownership check - authorize() has to run before we ever compare statuses.
+        assertThrows(AuthorizationException.class, () -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId));
+
+        verify(productDao, never()).update(any());
+    }
+
+    @Test
     void create_ShouldBuildSpecificationFromDimensionsAndWeight() {
         final NewProduct newDto = createValidNewDomain();
         when(productDao.create(any())).thenAnswer(invocation -> withId(invocation.getArgument(0), UUID.randomUUID()));

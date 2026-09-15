@@ -92,6 +92,28 @@ class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<NewCategory,
         verify(categoryDao, never()).update(any());
     }
 
+    @Test
+    void changeStatus_WhenNewStatusEqualsCurrentStatus_ShouldBeANoOp() {
+        final Category existing = persistedCategory(UUID.randomUUID(), requesterId, CategoryStatus.ACTIVE);
+        when(categoryDao.loadById(existing.getId())).thenReturn(existing);
+
+        assertDoesNotThrow(() -> categoriesService.changeStatus(existing.getId(), CategoryStatus.ACTIVE, requesterId));
+
+        assertEquals(CategoryStatus.ACTIVE, existing.getStatus());
+        verify(categoryDao, times(1)).loadById(existing.getId());
+        verify(categoryDao, never()).update(any());
+    }
+
+    @Test
+    void changeStatus_WhenRequesterIsNotOwnerAndStatusIsUnchanged_ShouldStillThrowAuthorizationException() {
+        final Category existing = persistedCategory(UUID.randomUUID(), alternativeRequesterId, CategoryStatus.ACTIVE);
+        when(categoryDao.loadById(existing.getId())).thenReturn(existing);
+
+        assertThrows(AuthorizationException.class, () -> categoriesService.changeStatus(existing.getId(), CategoryStatus.ACTIVE, requesterId));
+
+        verify(categoryDao, never()).update(any());
+    }
+
     @Override
     protected CategoriesService getService() {
         return categoriesService;
