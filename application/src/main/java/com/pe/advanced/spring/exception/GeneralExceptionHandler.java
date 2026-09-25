@@ -18,6 +18,8 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GeneralExceptionHandler.class);
 
+    public static final String HEADER_REQUESTER_ID = "X-Requester-Id";
+
     /**
      * A malformed path variable or request parameter is a bad request - except when the
      * parameter in question is the requester id, which means the caller never identified
@@ -25,7 +27,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public final ProblemDetail handleException(MethodArgumentTypeMismatchException e) {
-        if ("X-Requester-Id".equals(e.getName())) {
+        if (HEADER_REQUESTER_ID.equals(e.getName())) {
             logger.warn("Request arrived without a usable requester id");
             return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Client is not authenticated.");
         }

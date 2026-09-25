@@ -139,7 +139,7 @@ class GeneralExceptionHandlerTestCase {
         }
 
         @GetMapping("/requester")
-        void requester(@RequestParam("X-Requester-Id") UUID requesterId) {
+        void requester(@RequestParam(GeneralExceptionHandler.HEADER_REQUESTER_ID) UUID requesterId) {
             // Never reached - the conversion fails first
         }
 
