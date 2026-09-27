@@ -5,6 +5,7 @@ import com.pe.advanced.domain.exceptions.ConflictException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,6 +51,12 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn("Unreadable request body: {}", e.getMessage());
         final var problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Request body could not be read.");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    @ExceptionHandler({ DataIntegrityViolationException.class })
+    public final ProblemDetail handleException(DataIntegrityViolationException e) {
+        logger.warn("Integrity constraint violated: {}", e.getMessage());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "The request conflicts with existing data.");
     }
 
     @ExceptionHandler({AuthorizationException.class})
