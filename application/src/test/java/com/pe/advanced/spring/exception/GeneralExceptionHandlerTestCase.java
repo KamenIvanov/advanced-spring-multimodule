@@ -5,6 +5,7 @@ import com.pe.advanced.domain.exceptions.ConflictException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.pe.advanced.spring.exception.GeneralExceptionHandler.HEADER_REQUESTER_ID;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -64,6 +66,20 @@ class GeneralExceptionHandlerTestCase {
     }
 
     @Test
+    void whenDataIntegrityIsViolated_ShouldReturn409WithoutLeakingTheDriverMessage() throws Exception {
+        final var response = mockMvc.perform(get("/test/integrity"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.detail").value("The request conflicts with existing data."))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        // The driver's own message names the constraint and is dialect-specific - log only.
+        assertFalse(response.contains("uk_category_name"));
+    }
+
+    @Test
     void whenUnexpectedExceptionIsThrown_ShouldReturn500WithGenericDetail() throws Exception {
         mockMvc.perform(get("/test/unexpected"))
                 .andExpect(status().isInternalServerError())
@@ -85,7 +101,7 @@ class GeneralExceptionHandlerTestCase {
 
     @Test
     void whenRequesterIdIsMalformed_ShouldReturn401() throws Exception {
-        mockMvc.perform(get("/test/requester").param("X-Requester-Id", "not-a-uuid"))
+        mockMvc.perform(get("/test/requester").param(HEADER_REQUESTER_ID, "not-a-uuid"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
                 .andExpect(jsonPath("$.detail").value("Client is not authenticated."));
@@ -139,7 +155,7 @@ class GeneralExceptionHandlerTestCase {
         }
 
         @GetMapping("/requester")
-        void requester(@RequestParam(GeneralExceptionHandler.HEADER_REQUESTER_ID) UUID requesterId) {
+        void requester(@RequestParam(HEADER_REQUESTER_ID) UUID requesterId) {
             // Never reached - the conversion fails first
         }
 
@@ -151,6 +167,11 @@ class GeneralExceptionHandlerTestCase {
         @PostMapping("/body")
         void body(@RequestBody Map<String, Object> payload) {
             // Never reached - parsing fails first
+        }
+
+        @GetMapping("/integrity")
+        void integrity() {
+            throw new DataIntegrityViolationException("Duplicate entry 'Building Sets' for key 'uk_category_name'");
         }
     }
 }
