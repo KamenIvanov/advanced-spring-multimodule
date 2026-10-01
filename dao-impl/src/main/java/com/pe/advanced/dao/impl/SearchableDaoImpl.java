@@ -66,7 +66,7 @@ public abstract class SearchableDaoImpl<
 
         var orderDirection = switch (direction) {
             case ASC -> Sort.Direction.ASC;
-            default -> Sort.Direction.DESC; // Handles both null and DESC
+            case null, default -> Sort.Direction.DESC; // Handles both null and DESC
         };
 
         // ID as tiebreaker ensures stable pagination when sortBy field has equal values

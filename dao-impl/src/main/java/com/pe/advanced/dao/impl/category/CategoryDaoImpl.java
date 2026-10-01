@@ -3,6 +3,7 @@ package com.pe.advanced.dao.impl.category;
 import com.pe.advanced.dao.api.category.CategoryDao;
 import com.pe.advanced.dao.api.category.CategorySearchParams;
 import com.pe.advanced.dao.impl.SearchableDaoImpl;
+import com.pe.advanced.dao.impl.transformers.category.CategoryStatusTransformer;
 import com.pe.advanced.dao.impl.transformers.category.CategoryTransformer;
 import com.pe.advanced.domain.category.Category;
 import jakarta.persistence.criteria.Predicate;
@@ -34,8 +35,11 @@ public class CategoryDaoImpl extends SearchableDaoImpl<
                 predicates.add(cb.like(cb.lower(root.get("name")), "%" + params.getName().toLowerCase() + "%"));
             }
 
-            if (params.getActive() != null) {
-                predicates.add(cb.equal(root.get("active"), params.getActive()));
+            if (params.getStatus() != null) {
+                predicates.add(cb.equal(
+                        root.get("status"),
+                        CategoryStatusTransformer.instance.createInput(params.getStatus())
+                ));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
