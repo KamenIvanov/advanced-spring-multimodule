@@ -15,13 +15,36 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ProductDaoTestCase extends AbstractSearchableTestCase<UUID, Product, ProductDao, ProductSearchParams> {
 
     @Autowired
     private ProductDao productDao;
+
+    @Test
+    void testFindAssignmentInfo() {
+        final var firstCreator = UUID.randomUUID();
+        final var secondCreator = UUID.randomUUID();
+        final var first = createDomainWithUniqueData();
+        first.setCreatedById(firstCreator);
+        final var second = createDomainWithUniqueData();
+        second.setCreatedById(secondCreator);
+        final var firstId = runSave(first).getId();
+        final var secondId = runSave(second).getId();
+
+        final var info = getDao().findAssignmentInfo(List.of(firstId, secondId, UUID.randomUUID()));
+
+        assertEquals(2, info.size());
+        assertEquals(firstCreator, info.get(firstId).createdById());
+        assertEquals(secondCreator, info.get(secondId).createdById());
+        assertEquals(ProductStatus.DRAFT, info.get(firstId).status());
+        assertTrue(getDao().findAssignmentInfo(List.of()).isEmpty());
+    }
 
     @Override
     protected ProductSearchParams createSearchParams() {

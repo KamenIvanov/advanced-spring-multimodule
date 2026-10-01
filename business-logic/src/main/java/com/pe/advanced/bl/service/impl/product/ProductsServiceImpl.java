@@ -4,6 +4,7 @@ import com.pe.advanced.bl.service.ProductsService;
 import com.pe.advanced.bl.service.impl.AbstractCrudService;
 import com.pe.advanced.bl.transformer.product.NewProductTransformer;
 import com.pe.advanced.bl.transformer.product.UpdateProductTransformer;
+import com.pe.advanced.dao.api.category.assignment.CategoryAssignmentDao;
 import com.pe.advanced.dao.api.product.ProductDao;
 import com.pe.advanced.dao.api.product.ProductSearchParams;
 import com.pe.advanced.dao.api.product.ProductSort;
@@ -21,8 +22,18 @@ import java.util.UUID;
 
 public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateProduct, Product, ProductDao> implements ProductsService {
 
-    public ProductsServiceImpl(ProductDao dao) {
+    private final CategoryAssignmentDao assignmentDao;
+
+    public ProductsServiceImpl(ProductDao dao, CategoryAssignmentDao assignmentDao) {
         super(dao);
+        this.assignmentDao = assignmentDao;
+    }
+
+    @Override
+    @Transactional
+    public void delete(UUID id, UUID requesterId) {
+        super.delete(id, requesterId);
+        assignmentDao.deleteAllForProduct(id);
     }
 
     @Override

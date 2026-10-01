@@ -4,6 +4,7 @@ import com.pe.advanced.bl.service.AbstractCrudServiceTestCase;
 import com.pe.advanced.bl.service.CategoriesService;
 import com.pe.advanced.bl.service.impl.category.CategoriesServiceImpl;
 import com.pe.advanced.dao.api.category.CategoryDao;
+import com.pe.advanced.dao.api.category.assignment.CategoryAssignmentDao;
 import com.pe.advanced.domain.category.Category;
 import com.pe.advanced.domain.category.CategoryStatus;
 import com.pe.advanced.domain.category.NewCategory;
@@ -24,6 +25,9 @@ class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<NewCategory,
 
     @Mock
     private CategoryDao categoryDao;
+
+    @Mock
+    private CategoryAssignmentDao categoryAssignmentDao;
 
     @InjectMocks
     private CategoriesServiceImpl categoriesService;

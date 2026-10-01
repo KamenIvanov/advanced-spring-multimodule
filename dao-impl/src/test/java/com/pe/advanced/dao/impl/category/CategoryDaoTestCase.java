@@ -80,15 +80,6 @@ class CategoryDaoTestCase extends AbstractSearchableTestCase<UUID, Category, Cat
     }
 
     @Test
-    void testSortWithoutDirection() {
-        saved("Alpha", CategoryStatus.INACTIVE);
-        final var params = searchAll();
-        params.setSortBy(CategorySort.NAME);
-
-        assertDoesNotThrow(() -> categoryDao.search(params));
-    }
-
-    @Test
     void testSortWithExplicitNullDirection() {
         saved("Alpha", CategoryStatus.INACTIVE);
         final var params = searchAll();
