@@ -74,6 +74,7 @@ class CategoryAssignmentsServiceTestCase {
         final var assigned = assertInstanceOf(ProductAssignmentResult.Assigned.class, results.get(0));
         assertEquals(fresh, assigned.assignment().getProductId());
         assertInstanceOf(ProductAssignmentResult.AlreadyAssigned.class, results.get(1));
+        assertInstanceOf(ProductAssignmentResult.ProductNotFound.class, results.get(2));
         assertInstanceOf(ProductAssignmentResult.ProductNotFound.class, results.get(3));
         assertInstanceOf(ProductAssignmentResult.ProductArchived.class, results.get(4));
 
