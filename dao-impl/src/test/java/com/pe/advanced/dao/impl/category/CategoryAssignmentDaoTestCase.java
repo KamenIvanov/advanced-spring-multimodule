@@ -21,8 +21,6 @@ class CategoryAssignmentDaoTestCase extends AbstractDaoTest {
     @Autowired
     private CategoryAssignmentDao dao;
 
-    // --- saveAll ---
-
     @Test
     void testSaveAllReturnsPersistedInstancesInInputOrder() {
         final var first = assignment(categoryId, UUID.randomUUID());
@@ -63,8 +61,6 @@ class CategoryAssignmentDaoTestCase extends AbstractDaoTest {
         assertTrue(dao.findAssignedProductIds(categoryId, List.of()).isEmpty());
     }
 
-    // --- findAssignedProductIds ---
-
     @Test
     void testFindAssignedReturnsOnlyAssignedAmongRequested() {
         final var assigned = UUID.randomUUID();
@@ -81,8 +77,6 @@ class CategoryAssignmentDaoTestCase extends AbstractDaoTest {
 
         assertTrue(dao.findAssignedProductIds(categoryId, List.of(productId)).isEmpty());
     }
-
-    // --- delete (single pair) ---
 
     @Test
     void testDeleteRemovesOnlyTheTargetedPair() {
@@ -104,8 +98,6 @@ class CategoryAssignmentDaoTestCase extends AbstractDaoTest {
     void testDeleteMissingIsNoOp() {
         assertDoesNotThrow(() -> dao.delete(categoryId, UUID.randomUUID()));
     }
-
-    // --- bulk cleanup ---
 
     @Test
     void testDeleteAllForCategoryRemovesOnlyThatCategory() {
@@ -145,8 +137,6 @@ class CategoryAssignmentDaoTestCase extends AbstractDaoTest {
         assertDoesNotThrow(() -> dao.deleteAllForCategory(UUID.randomUUID()));
         assertDoesNotThrow(() -> dao.deleteAllForProduct(UUID.randomUUID()));
     }
-
-    // --- constraint ---
 
     @Test
     void testDuplicatePairViolatesUniqueConstraint() {

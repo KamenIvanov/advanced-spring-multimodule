@@ -33,6 +33,10 @@ public final class CategoryAssignmentTransformer extends AbstractBiTransformer<C
 
     @Override
     public CategoryAssignment createOutput(CategoryAssignmentEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
         return new CategoryAssignment(
                 entity.getId(),
                 entity.getCreatedAt(),
