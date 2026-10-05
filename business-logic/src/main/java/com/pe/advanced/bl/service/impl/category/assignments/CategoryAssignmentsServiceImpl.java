@@ -38,6 +38,8 @@ public class CategoryAssignmentsServiceImpl extends AbstractService implements C
         }
         Objects.requireNonNull(productIds, "productIds are mandatory");
 
+        // categories are platform-owned: any authenticated user may assign into them,
+        // while creating and archiving them is an administrative operation
         final var category = loadOrThrowNotFound(() -> categoryDao.loadById(categoryId));
         if (category.getStatus() == CategoryStatus.ARCHIVED) {
             throw new ConflictException("Category is archived and does not accept new products.");
@@ -93,13 +95,17 @@ public class CategoryAssignmentsServiceImpl extends AbstractService implements C
                 && info.status() != ProductStatus.ARCHIVED;
     }
 
-    private ProductAssignmentResult toResult(UUID productId, UUID requesterId, Map<UUID, ProductAssignmentInfo> products, Map<UUID, CategoryAssignment> saved) {
+    private ProductAssignmentResult toResult(
+            UUID productId,
+            UUID requesterId,
+            Map<UUID, ProductAssignmentInfo> products,
+            Map<UUID, CategoryAssignment> saved
+    ) {
         final var info = products.get(productId);
-        if (info == null) {
+
+        // a product the requester does not own is indistinguishable from one that does not exist
+        if (info == null || !requesterId.equals(info.createdById())) {
             return new ProductAssignmentResult.ProductNotFound(productId);
-        }
-        if (!requesterId.equals(info.createdById())) {
-            return new ProductAssignmentResult.ProductNotOwned(productId);
         }
         if (info.status() == ProductStatus.ARCHIVED) {
             return new ProductAssignmentResult.ProductArchived(productId);

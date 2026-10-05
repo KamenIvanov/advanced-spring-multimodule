@@ -68,14 +68,12 @@ class CategoryAssignmentsServiceTestCase {
         when(assignmentDao.findAssignedProductIds(eq(CATEGORY_ID), any())).thenReturn(Set.of(already));
         when(assignmentDao.saveAll(any())).thenAnswer(inv -> persisted(inv.getArgument(0)));
 
-        final var results = service.assignProducts(
-                CATEGORY_ID, List.of(fresh, already, foreign, unknown, archived, fresh), REQUESTER);
+        final var results = service.assignProducts(CATEGORY_ID, List.of(fresh, already, foreign, unknown, archived, fresh), REQUESTER);
 
         assertEquals(5, results.size(), "the repeated id is reported once");
         final var assigned = assertInstanceOf(ProductAssignmentResult.Assigned.class, results.get(0));
         assertEquals(fresh, assigned.assignment().getProductId());
         assertInstanceOf(ProductAssignmentResult.AlreadyAssigned.class, results.get(1));
-        assertInstanceOf(ProductAssignmentResult.ProductNotOwned.class, results.get(2));
         assertInstanceOf(ProductAssignmentResult.ProductNotFound.class, results.get(3));
         assertInstanceOf(ProductAssignmentResult.ProductArchived.class, results.get(4));
 
@@ -85,6 +83,21 @@ class CategoryAssignmentsServiceTestCase {
         final var written = savedCaptor.getValue().iterator().next();
         assertEquals(fresh, written.getProductId());
         assertEquals(REQUESTER, written.getAssignedById());
+    }
+
+    @Test
+    void testForeignProductIsIndistinguishableFromAMissingOne() {
+        final var foreign = UUID.randomUUID();
+        final var missing = UUID.randomUUID();
+        when(categoryDao.loadById(CATEGORY_ID)).thenReturn(category(CategoryStatus.ACTIVE));
+        when(productDao.findAssignmentInfo(any())).thenReturn(Map.of(foreign, info(UUID.randomUUID(), ProductStatus.ACTIVE)));
+        when(assignmentDao.findAssignedProductIds(eq(CATEGORY_ID), any())).thenReturn(Set.of());
+        when(assignmentDao.saveAll(any())).thenReturn(List.of());
+
+        final var results = service.assignProducts(CATEGORY_ID, List.of(foreign, missing), REQUESTER);
+
+        assertInstanceOf(ProductAssignmentResult.ProductNotFound.class, results.get(0));
+        assertInstanceOf(ProductAssignmentResult.ProductNotFound.class, results.get(1));
     }
 
     @Test
