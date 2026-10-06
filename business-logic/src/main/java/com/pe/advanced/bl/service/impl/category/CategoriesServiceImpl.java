@@ -7,6 +7,7 @@ import com.pe.advanced.bl.transformer.category.UpdateCategoryTransformer;
 import com.pe.advanced.dao.api.category.CategoryDao;
 import com.pe.advanced.dao.api.category.CategorySearchParams;
 import com.pe.advanced.dao.api.category.CategorySort;
+import com.pe.advanced.dao.api.category.assignment.CategoryAssignmentDao;
 import com.pe.advanced.dao.api.search.ResultPage;
 import com.pe.advanced.dao.api.search.SortDirection;
 import com.pe.advanced.domain.category.Category;
@@ -21,8 +22,18 @@ import java.util.UUID;
 
 public class CategoriesServiceImpl extends AbstractCrudService<NewCategory, UpdateCategory, Category, CategoryDao> implements CategoriesService {
 
-    public CategoriesServiceImpl(CategoryDao dao) {
+    private final CategoryAssignmentDao assignmentDao;
+
+    public CategoriesServiceImpl(CategoryDao dao, CategoryAssignmentDao assignmentDao) {
         super(dao);
+        this.assignmentDao = assignmentDao;
+    }
+
+    @Override
+    @Transactional
+    public void delete(UUID id, UUID requesterId) {
+        super.delete(id, requesterId);
+        assignmentDao.deleteAllForCategory(id);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.pe.advanced.bl.service.products;
 import com.pe.advanced.bl.service.AbstractCrudServiceTestCase;
 import com.pe.advanced.bl.service.ProductsService;
 import com.pe.advanced.bl.service.impl.product.ProductsServiceImpl;
+import com.pe.advanced.dao.api.category.assignment.CategoryAssignmentDao;
 import com.pe.advanced.dao.api.product.ProductDao;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
@@ -22,6 +23,9 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, Up
 
     @Mock
     private ProductDao productDao;
+
+    @Mock
+    private CategoryAssignmentDao categoryAssignmentDao;
 
     @InjectMocks
     private ProductsServiceImpl productsService;

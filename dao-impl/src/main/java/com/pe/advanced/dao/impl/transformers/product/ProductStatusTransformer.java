@@ -4,11 +4,11 @@ import com.pe.advanced.dao.impl.product.ProductStatusEntity;
 import com.pe.advanced.domain.product.ProductStatus;
 import com.pe.advanced.domain.transformers.AbstractEnumTransformer;
 
-public class ProductTypeTransformer extends AbstractEnumTransformer<ProductStatusEntity, ProductStatus> {
+public class ProductStatusTransformer extends AbstractEnumTransformer<ProductStatusEntity, ProductStatus> {
 
-    public static final ProductTypeTransformer instance = new ProductTypeTransformer();
+    public static final ProductStatusTransformer instance = new ProductStatusTransformer();
 
-    private ProductTypeTransformer() {
+    private ProductStatusTransformer() {
         super(ProductStatusEntity.class, ProductStatus.class);
     }
 }

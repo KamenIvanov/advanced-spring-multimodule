@@ -6,7 +6,7 @@ public enum CategorySort implements SortBy {
 
     NAME("name"),
     CREATED_AT("createdAt"),
-    ACTIVE("active");
+    STATUS("status");
 
     private final String value;
 

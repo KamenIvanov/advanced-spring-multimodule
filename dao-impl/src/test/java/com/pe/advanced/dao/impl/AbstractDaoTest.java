@@ -1,6 +1,7 @@
 package com.pe.advanced.dao.impl;
 
 import com.pe.advanced.dao.impl.category.CategoryDaoImpl;
+import com.pe.advanced.dao.impl.category.assignment.CategoryAssignmentDaoImpl;
 import com.pe.advanced.dao.impl.hibernate.H2QueryFactory;
 import com.pe.advanced.dao.impl.hibernate.TablesEraser;
 import com.pe.advanced.dao.impl.product.ProductDaoImpl;
@@ -18,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 @Import({
         ProductDaoImpl.class,
         CategoryDaoImpl.class,
+        CategoryAssignmentDaoImpl.class,
         TestConfig.class
 })
 public abstract class AbstractDaoTest {

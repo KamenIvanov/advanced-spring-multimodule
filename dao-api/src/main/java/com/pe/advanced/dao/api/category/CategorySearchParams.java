@@ -1,11 +1,12 @@
 package com.pe.advanced.dao.api.category;
 
 import com.pe.advanced.dao.api.search.AbstractParams;
+import com.pe.advanced.domain.category.CategoryStatus;
 
 public class CategorySearchParams extends AbstractParams<CategorySort> {
 
     private String name;
-    private Boolean active;
+    private CategoryStatus status;
 
     public String getName() {
         return name;
@@ -15,11 +16,11 @@ public class CategorySearchParams extends AbstractParams<CategorySort> {
         this.name = name;
     }
 
-    public Boolean getActive() {
-        return active;
+    public CategoryStatus getStatus() {
+        return status;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setStatus(CategoryStatus status) {
+        this.status = status;
     }
 }

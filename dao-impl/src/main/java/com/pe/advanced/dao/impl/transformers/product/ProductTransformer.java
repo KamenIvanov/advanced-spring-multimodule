@@ -18,7 +18,7 @@ public class ProductTransformer extends AbstractAuditableEntityTransformer<Produ
 
         source.setName(dest.getName());
         source.setSku(dest.getSku());
-        source.setStatus(ProductTypeTransformer.instance.createInput(dest.getStatus()));
+        source.setStatus(ProductStatusTransformer.instance.createInput(dest.getStatus()));
         source.setPrice(dest.getPrice());
         source.setSpecification(ProductSpecificationTransformer.instance.createInput(dest.getSpecification()));
     }
@@ -54,7 +54,7 @@ public class ProductTransformer extends AbstractAuditableEntityTransformer<Produ
                 entity.getId(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
-                ProductTypeTransformer.instance.createOutput(entity.getStatus())
+                ProductStatusTransformer.instance.createOutput(entity.getStatus())
         );
         copyToOutput(entity, product);
         return product;
