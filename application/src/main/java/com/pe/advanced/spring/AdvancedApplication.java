@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @ComponentScan(excludeFilters = @ComponentScan.Filter(
         type = FilterType.REGEX,
-        pattern = "com.pe.advanced.spring.*"
+        pattern = "com\\.pe\\.advanced\\.spring\\..*"
 ))
 @Import({
         FlywayConfiguration.class,
