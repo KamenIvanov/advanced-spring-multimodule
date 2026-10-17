@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>application</artifactId>
+    <name>Advanced Microservice Template</name>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -91,6 +92,33 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>${docker.registry}/${docker.image.name}:${project.version}</name>
+                            <build>
+                                <dockerFile>Dockerfile</dockerFile>
+                                <assembly>
+                                    <mode>dir</mode>
+                                    <inline>
+                                        <files>
+                                            <file>
+                                                <source>
+                                                    target/${project.artifactId}-${project.version}-exec.jar
+                                                </source>
+                                            </file>
+                                        </files>
+                                    </inline>
+                                </assembly>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
             </plugin>
         </plugins>
     </build>
