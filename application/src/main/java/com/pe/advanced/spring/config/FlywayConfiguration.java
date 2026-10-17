@@ -14,7 +14,6 @@ public class FlywayConfiguration {
         config.setLocationsAsStrings("classpath:db/migrations");
         config.setConnectRetries(Integer.MAX_VALUE);
         config.setCleanDisabled(true);
-        config.setCleanOnValidationError(false);
         config.setOutOfOrder(false);
         config.setValidateOnMigrate(true);
         return config;
