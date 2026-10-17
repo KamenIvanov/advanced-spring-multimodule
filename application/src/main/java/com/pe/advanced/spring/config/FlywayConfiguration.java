@@ -13,6 +13,7 @@ public class FlywayConfiguration {
         config.setDataSource(dataSource);
         config.setLocationsAsStrings("classpath:db/migrations");
         config.setConnectRetries(Integer.MAX_VALUE);
+        config.setConnectRetriesInterval(10);
         config.setCleanDisabled(true);
         config.setOutOfOrder(false);
         config.setValidateOnMigrate(true);
