@@ -3,8 +3,10 @@ package com.pe.advanced.spring;
 import com.pe.advanced.spring.config.FlywayConfiguration;
 import com.pe.advanced.spring.config.PersistenceConfiguration;
 import com.pe.advanced.spring.config.ServiceWorkersConfiguration;
+import com.pe.advanced.spring.config.properties.AssignmentProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
@@ -18,6 +20,9 @@ import org.springframework.context.annotation.Import;
         FlywayConfiguration.class,
         PersistenceConfiguration.class,
         ServiceWorkersConfiguration.class
+})
+@EnableConfigurationProperties({
+        AssignmentProperties.class
 })
 public class AdvancedApplication {
 
