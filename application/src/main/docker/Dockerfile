@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-openjdk-alpine:25
+FROM bellsoft/liberica-openjdk-alpine:${liberica.version}
 
 ENV LOG_DIR=/runtime/logs
 ENV JAR_LOCATION=/data/advanced-service.jar

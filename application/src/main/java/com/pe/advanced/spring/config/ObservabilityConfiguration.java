@@ -11,5 +11,4 @@ public class ObservabilityConfiguration {
         return new BuildInfoContributor();
     }
 
-
 }
