@@ -1,6 +1,7 @@
 package com.pe.advanced.spring;
 
 import com.pe.advanced.spring.config.FlywayConfiguration;
+import com.pe.advanced.spring.config.ObservabilityConfiguration;
 import com.pe.advanced.spring.config.PersistenceConfiguration;
 import com.pe.advanced.spring.config.ServiceWorkersConfiguration;
 import com.pe.advanced.spring.config.properties.AssignmentProperties;
@@ -19,7 +20,8 @@ import org.springframework.context.annotation.Import;
 @Import({
         FlywayConfiguration.class,
         PersistenceConfiguration.class,
-        ServiceWorkersConfiguration.class
+        ServiceWorkersConfiguration.class,
+        ObservabilityConfiguration.class
 })
 @EnableConfigurationProperties({
         AssignmentProperties.class
