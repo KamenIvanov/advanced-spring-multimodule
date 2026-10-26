@@ -21,9 +21,19 @@
         <plugin.maven.properties.version>1.2.1</plugin.maven.properties.version>
         <plugin.javadoc.version>3.12.0</plugin.javadoc.version>
         <plugin.maven.enforcer.version>3.5.0</plugin.maven.enforcer.version>
+        <plugin.buildnumber.version>3.2.1</plugin.buildnumber.version>
+        <plugin.docker.version>0.49.0</plugin.docker.version>
 
         <spring.boot.version>4.1.1</spring.boot.version>
+
+        <docker.registry>docker.io</docker.registry>
+        <liberica.version>25.0.4-9</liberica.version>
+        <docker.image.name>advanced-service</docker.image.name>
     </properties>
+
+    <organization>
+        <name>PureEngine Ltd.</name>
+    </organization>
 
     <modules>
         <module>domain</module>
@@ -215,6 +225,59 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>${plugin.buildnumber.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-resources</phase>
+                            <goals>
+                                <goal>create</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <scmBranchPropertyName>scmBranch</scmBranchPropertyName>
+                        <timestampPropertyName>buildTime</timestampPropertyName>
+                        <buildNumberPropertyName>scmRevision</buildNumberPropertyName>
+                        <shortRevisionLength>8</shortRevisionLength>
+                        <revisionOnScmFailure>0</revisionOnScmFailure>
+                        <timestampFormat>yyyy-MM-dd HH:mmXXX</timestampFormat>
+                        <doCheck>false</doCheck>
+                        <doUpdate>false</doUpdate>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${plugin.docker.version}</version>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <!--<pushRegistry>${docker.registry}</pushRegistry>
+                        <pullRegistry>${docker.registry}</pullRegistry>-->
+                        <verbose>true</verbose>
+                        <useColor>true</useColor>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>docker:build</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>docker:push</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>push</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -242,6 +305,11 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
             </plugin>
 
             <plugin>
