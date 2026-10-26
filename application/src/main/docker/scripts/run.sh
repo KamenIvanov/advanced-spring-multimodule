@@ -26,7 +26,7 @@ echo "$(date +"%T"): ======================="
 
 cd /runtime
 
-# $DEBUG_OPTS and $JAVA_OPTS are deliberately unquoted: word splitting is how
+# $DEBUG_OPTS and $JAVA_OPTS are unquoted: word splitting is how
 # whitespace-separated JVM options arrive at java as separate arguments.
 # Options whose values contain spaces belong in JAVA_TOOL_OPTIONS instead.
 # exec allows Java to receive container shutdown signals directly.
