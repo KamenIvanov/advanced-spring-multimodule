@@ -256,8 +256,8 @@
                     <version>${plugin.docker.version}</version>
                     <inherited>true</inherited>
                     <configuration>
-                        <!--<pushRegistry>${pe.docker.registry}</pushRegistry>
-                        <pullRegistry>${pe.docker.registry}</pullRegistry>-->
+                        <!--<pushRegistry>${docker.registry}</pushRegistry>
+                        <pullRegistry>${docker.registry}</pullRegistry>-->
                         <verbose>true</verbose>
                         <useColor>true</useColor>
                     </configuration>
