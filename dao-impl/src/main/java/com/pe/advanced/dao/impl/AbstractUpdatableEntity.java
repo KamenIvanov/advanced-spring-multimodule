@@ -14,7 +14,7 @@ public abstract class AbstractUpdatableEntity extends AbstractCreatableEntity {
     private Instant updatedAt;
 
     @Version
-    private Long version;
+    private Integer version;
 
     protected AbstractUpdatableEntity() {
         // POJO
@@ -32,11 +32,11 @@ public abstract class AbstractUpdatableEntity extends AbstractCreatableEntity {
         this.updatedAt = updatedAt;
     }
 
-    public Long getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 }
