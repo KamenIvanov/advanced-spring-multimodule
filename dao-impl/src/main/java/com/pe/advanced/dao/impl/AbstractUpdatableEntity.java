@@ -2,6 +2,7 @@ package com.pe.advanced.dao.impl;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -11,6 +12,9 @@ public abstract class AbstractUpdatableEntity extends AbstractCreatableEntity {
 
     @Column(name = "updated_at", nullable = false, columnDefinition = "timestamp(3)")
     private Instant updatedAt;
+
+    @Version
+    private Long version;
 
     protected AbstractUpdatableEntity() {
         // POJO
@@ -26,5 +30,13 @@ public abstract class AbstractUpdatableEntity extends AbstractCreatableEntity {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }
