@@ -13,6 +13,7 @@ public abstract class AbstractUpdatableEntity extends AbstractCreatableEntity {
     @Column(name = "updated_at", nullable = false, columnDefinition = "timestamp(3)")
     private Instant updatedAt;
 
+    /* Used by hibernate only */
     @Version
     private Integer version;
 
@@ -30,13 +31,5 @@ public abstract class AbstractUpdatableEntity extends AbstractCreatableEntity {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 }
