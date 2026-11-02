@@ -8,7 +8,7 @@ CREATE TABLE `categories`
     `version`       INTEGER       NOT NULL DEFAULT 0,
     `name`          VARCHAR(255)  NOT NULL,
     `description`   VARCHAR(1000)          DEFAULT NULL,
-    `status`        VARCHAR(32)   NOT NULL,
+    `status`        ENUM ('INACTIVE', 'ACTIVE', 'ARCHIVED')   NOT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `uk_categories_name` UNIQUE (`name`)
 ) ENGINE = InnoDB
@@ -43,7 +43,7 @@ CREATE TABLE `products`
     `name`             VARCHAR(255)   NOT NULL,
     `sku`              VARCHAR(64)    NOT NULL,
     `price`            DECIMAL(12, 2) NOT NULL,
-    `status`           VARCHAR(32)    NOT NULL,
+    `status`           ENUM ('DRAFT', 'ACTIVE', 'OUT_OF_STOCK', 'ARCHIVED')   NOT NULL,
     `specification_id` BINARY(16)     NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `uk_products_sku` UNIQUE (`sku`),
