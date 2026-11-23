@@ -9,6 +9,7 @@ import com.pe.advanced.dao.api.product.ProductAssignmentInfo;
 import com.pe.advanced.dao.api.product.ProductDao;
 import com.pe.advanced.domain.category.CategoryAssignment;
 import com.pe.advanced.domain.category.CategoryStatus;
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.exceptions.ConflictException;
 import com.pe.advanced.domain.product.ProductStatus;
@@ -34,7 +35,7 @@ public class CategoryAssignmentsServiceImpl extends AbstractService implements C
     @Transactional
     public List<ProductAssignmentResult> assignProducts(UUID categoryId, List<UUID> productIds, UUID requesterId) {
         if (requesterId == null) {
-            throw new AuthorizationException(UNAUTHORIZED);
+            throw new AuthenticationException(UNAUTHENTICATED);
         }
         Objects.requireNonNull(productIds, "productIds are mandatory");
 
@@ -74,7 +75,7 @@ public class CategoryAssignmentsServiceImpl extends AbstractService implements C
     @Transactional
     public void unassignProduct(UUID categoryId, UUID productId, UUID requesterId) {
         if (requesterId == null) {
-            throw new AuthorizationException(UNAUTHORIZED);
+            throw new AuthenticationException(UNAUTHENTICATED);
         }
         // the category must exist but may be archived: removal is always allowed
         loadOrThrowNotFound(() -> categoryDao.loadById(categoryId));

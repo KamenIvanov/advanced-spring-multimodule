@@ -12,6 +12,7 @@ public abstract class AbstractService {
 
     protected static final String MISSING_ENTITY = "No such entity.";
     protected static final String UNAUTHORIZED   = "Client is not authorized for this operation.";
+    protected static final String UNAUTHENTICATED = "Client is not authenticated.";
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractService.class);
 

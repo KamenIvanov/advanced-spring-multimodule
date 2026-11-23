@@ -9,6 +9,7 @@ import com.pe.advanced.dao.api.product.ProductDao;
 import com.pe.advanced.domain.category.Category;
 import com.pe.advanced.domain.category.CategoryAssignment;
 import com.pe.advanced.domain.category.CategoryStatus;
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.exceptions.ConflictException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
@@ -157,8 +158,8 @@ class CategoryAssignmentsServiceTestCase {
 
     @Test
     void testNullRequester() {
-        assertThrows(AuthorizationException.class, () -> service.assignProducts(CATEGORY_ID, List.of(UUID.randomUUID()), null));
-        assertThrows(AuthorizationException.class, () -> service.unassignProduct(CATEGORY_ID, UUID.randomUUID(), null));
+        assertThrows(AuthenticationException.class, () -> service.assignProducts(CATEGORY_ID, List.of(UUID.randomUUID()), null));
+        assertThrows(AuthenticationException.class, () -> service.unassignProduct(CATEGORY_ID, UUID.randomUUID(), null));
     }
 
     @Test

@@ -53,6 +53,10 @@ public class ProductDaoImpl extends SearchableDaoImpl<
                 predicates.add(cb.like(cb.lower(root.get("name")), "%" + params.getName().toLowerCase() + "%"));
             }
 
+            if(params.getCreatedById() != null){
+                predicates.add(cb.equal(root.get("createdById"), params.getCreatedById()));
+            }
+
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

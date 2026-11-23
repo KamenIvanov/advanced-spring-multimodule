@@ -26,6 +26,8 @@
 
         <spring.boot.version>4.1.1</spring.boot.version>
 
+        <advanced.api.version>1.0.0-SNAPSHOT</advanced.api.version>
+
         <docker.registry>docker.io</docker.registry>
         <liberica.version>25.0.4-9</liberica.version>
         <docker.image.name>advanced-service</docker.image.name>
@@ -82,6 +84,13 @@
                 <groupId>com.pe.advanced.spring</groupId>
                 <artifactId>business-logic</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <!-- API -->
+            <dependency>
+                <groupId>com.pe.advanced.api</groupId>
+                <artifactId>rest-api</artifactId>
+                <version>${advanced.api.version}</version>
             </dependency>
 
             <!-- Test -->
