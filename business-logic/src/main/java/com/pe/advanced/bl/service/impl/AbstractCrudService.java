@@ -3,7 +3,7 @@ package com.pe.advanced.bl.service.impl;
 import com.pe.advanced.bl.service.CrudService;
 import com.pe.advanced.dao.api.CrudDao;
 import com.pe.advanced.domain.AbstractAuditable;
-import com.pe.advanced.domain.exceptions.AuthorizationException;
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
 import com.pe.advanced.domain.transformers.Transformer;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ public abstract class AbstractCrudService<
     @Transactional
     public Domain create(CreateDomain newDomain, UUID requesterId) {
         if (requesterId == null) {
-            throw new AuthorizationException(UNAUTHORIZED);
+            throw new AuthenticationException(UNAUTHENTICATED);
         }
 
         final var domain = getCreateTransformer().createOutput(newDomain);
@@ -41,7 +41,7 @@ public abstract class AbstractCrudService<
     @Transactional
     public Domain update(UUID id, UpdateDomain updateDomain, UUID requesterId) {
         if (requesterId == null) {
-            throw new AuthorizationException(UNAUTHORIZED);
+            throw new AuthenticationException(UNAUTHENTICATED);
         }
 
         if (id == null) {
@@ -62,7 +62,7 @@ public abstract class AbstractCrudService<
     @Transactional(readOnly = true)
     public Domain loadById(UUID id, UUID requesterId) {
         if (requesterId == null) {
-            throw new AuthorizationException(UNAUTHORIZED);
+            throw new AuthenticationException(UNAUTHENTICATED);
         }
 
         final var domain = loadOrThrowNotFound(() -> dao.loadById(id));
@@ -74,7 +74,7 @@ public abstract class AbstractCrudService<
     @Transactional
     public void delete(UUID id, UUID requesterId) {
         if (requesterId == null) {
-            throw new AuthorizationException(UNAUTHORIZED);
+            throw new AuthenticationException(UNAUTHENTICATED);
         }
 
         final var domain = dao.loadById(id);

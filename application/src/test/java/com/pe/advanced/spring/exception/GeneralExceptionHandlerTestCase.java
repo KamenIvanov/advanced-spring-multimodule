@@ -1,5 +1,6 @@
 package com.pe.advanced.spring.exception;
 
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.exceptions.ConflictException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.pe.advanced.spring.exception.GeneralExceptionHandler.HEADER_REQUESTER_ID;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -100,8 +100,8 @@ class GeneralExceptionHandlerTestCase {
     }
 
     @Test
-    void whenRequesterIdIsMalformed_ShouldReturn401() throws Exception {
-        mockMvc.perform(get("/test/requester").param(HEADER_REQUESTER_ID, "not-a-uuid"))
+    void whenAuthenticationExceptionIsThrown_ShouldReturn401WithProblemDetail() throws Exception {
+        mockMvc.perform(get("/test/unauthenticated"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
                 .andExpect(jsonPath("$.detail").value("Client is not authenticated."));
@@ -154,9 +154,9 @@ class GeneralExceptionHandlerTestCase {
             throw new RuntimeException("Connection refused to internal-db-host:3306");
         }
 
-        @GetMapping("/requester")
-        void requester(@RequestParam(HEADER_REQUESTER_ID) UUID requesterId) {
-            // Never reached - the conversion fails first
+        @GetMapping("/unauthenticated")
+        void unauthenticated() {
+            throw new AuthenticationException("Client is not authenticated.");
         }
 
         @GetMapping("/product/{id}")

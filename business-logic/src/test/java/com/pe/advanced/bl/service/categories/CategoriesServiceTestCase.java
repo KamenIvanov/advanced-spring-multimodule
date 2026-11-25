@@ -9,6 +9,7 @@ import com.pe.advanced.domain.category.Category;
 import com.pe.advanced.domain.category.CategoryStatus;
 import com.pe.advanced.domain.category.NewCategory;
 import com.pe.advanced.domain.category.UpdateCategory;
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -55,8 +56,8 @@ class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<NewCategory,
     }
 
     @Test
-    void changeStatus_WhenRequesterIdIsNull_ShouldThrowAuthorizationException() {
-        assertThrows(AuthorizationException.class, () -> categoriesService.changeStatus(UUID.randomUUID(), CategoryStatus.ACTIVE, null));
+    void changeStatus_WhenRequesterIdIsNull_ShouldThrowAuthenticationException() {
+        assertThrows(AuthenticationException.class, () -> categoriesService.changeStatus(UUID.randomUUID(), CategoryStatus.ACTIVE, null));
         verifyNoInteractions(categoryDao);
     }
 

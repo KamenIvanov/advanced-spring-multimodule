@@ -10,6 +10,7 @@ import com.pe.advanced.dao.api.product.ProductSearchParams;
 import com.pe.advanced.dao.api.product.ProductSort;
 import com.pe.advanced.dao.api.search.ResultPage;
 import com.pe.advanced.dao.api.search.SortDirection;
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.product.NewProduct;
 import com.pe.advanced.domain.product.Product;
@@ -38,21 +39,33 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
 
     @Override
     @Transactional(readOnly = true)
-    public ResultPage<Product> getProducts(int page, int size, ProductSort sort, SortDirection direction) {
-        final var query = new ProductSearchParams();
-        query.setPage(page);
-        query.setSize(size);
-        query.setSortBy(sort);
-        query.setSortDirection(direction);
+    public ResultPage<Product> getProducts(int page, int size, ProductSort sort, SortDirection direction, String query) {
+        return getDao().search(params(page, size, sort, direction, query));
+    }
 
-        return getDao().search(query);
+    @Override
+    @Transactional(readOnly = true)
+    public ResultPage<Product> getOwnProducts(int page, int size, ProductSort sort, SortDirection direction, String query, UUID requesterId) {
+        if (requesterId == null) {
+            throw new AuthenticationException(UNAUTHENTICATED);
+        }
+
+        final var params = params(page, size, sort, direction, query);
+        params.setCreatedById(requesterId);
+        return getDao().search(params);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Product loadPublicById(UUID id) {
+        return loadOrThrowNotFound(() -> getDao().loadById(id));
     }
 
     @Override
     @Transactional
-    public void changeStatus(UUID id, ProductStatus newStatus, UUID requesterId) {
+    public Product changeStatus(UUID id, ProductStatus newStatus, UUID requesterId) {
         if (requesterId == null) {
-            throw new AuthorizationException(UNAUTHORIZED);
+            throw new AuthenticationException(UNAUTHENTICATED);
         }
 
         final var product = loadOrThrowNotFound(() -> getDao().loadById(id));
@@ -61,13 +74,13 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
         authorize(product, requesterId);
 
         if (product.getStatus() == newStatus) {
-            return;
+            return product;
         }
 
         product.transitionTo(newStatus);
         product.setUpdatedById(requesterId);
 
-        getDao().update(product);
+        return getDao().update(product);
     }
 
     @Override
@@ -85,5 +98,25 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
         if (!domain.getCreatedById().equals(requesterId)) {
             throw new AuthorizationException(UNAUTHORIZED);
         }
+    }
+
+    /**
+     * An absent sort field or direction keeps whatever the parameter object defaults to, rather
+     * than overwriting it with null.
+     */
+    private static ProductSearchParams params(int page, int size, ProductSort sort, SortDirection direction, String query) {
+        final var params = new ProductSearchParams();
+        params.setPage(page);
+        params.setSize(size);
+        params.setName(query);
+
+        if (sort != null) {
+            params.setSortBy(sort);
+        }
+        if (direction != null) {
+            params.setSortDirection(direction);
+        }
+
+        return params;
     }
 }

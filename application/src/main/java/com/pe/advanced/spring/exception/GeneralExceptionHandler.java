@@ -1,5 +1,6 @@
 package com.pe.advanced.spring.exception;
 
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.exceptions.ConflictException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
@@ -19,20 +20,13 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GeneralExceptionHandler.class);
 
-    public static final String HEADER_REQUESTER_ID = "X-Requester-Id";
-
     /**
-     * A malformed path variable or request parameter is a bad request - except when the
-     * parameter in question is the requester id, which means the caller never identified
-     * itself at all. That is an authentication failure, not a malformed argument.
+     * A malformed path variable or request parameter is a bad request. The requester's
+     * identification is no longer among them: it is a header read by the provider, which
+     * reports its own failure as an authentication one.
      */
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public final ProblemDetail handleException(MethodArgumentTypeMismatchException e) {
-        if (HEADER_REQUESTER_ID.equals(e.getName())) {
-            logger.warn("Request arrived without a usable requester id");
-            return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Client is not authenticated.");
-        }
-
         logger.warn("Malformed argument '{}': {}", e.getName(), e.getMessage());
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Malformed value for '" + e.getName() + "'.");
     }
@@ -57,6 +51,12 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     public final ProblemDetail handleException(DataIntegrityViolationException e) {
         logger.warn("Integrity constraint violated: {}", e.getMessage());
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "The request conflicts with existing data.");
+    }
+
+    @ExceptionHandler({AuthenticationException.class})
+    public final ProblemDetail handleException(AuthenticationException e) {
+        logger.warn("Unauthenticated request: {}", e.getMessage());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     @ExceptionHandler({AuthorizationException.class})

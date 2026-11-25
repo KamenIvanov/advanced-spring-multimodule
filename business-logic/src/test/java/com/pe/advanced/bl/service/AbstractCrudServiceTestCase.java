@@ -2,6 +2,7 @@ package com.pe.advanced.bl.service;
 
 import com.pe.advanced.dao.api.CrudDao;
 import com.pe.advanced.domain.AbstractAuditable;
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -21,9 +22,9 @@ public abstract class AbstractCrudServiceTestCase<
         > extends AbstractServiceTestCase {
 
     @Test
-    void create_WhenRequesterIdIsNull_ShouldThrowAuthorizationException() {
+    void create_WhenRequesterIdIsNull_ShouldThrowAuthenticationException() {
         final NewDomain newDomain = createValidNewDomain();
-        assertThrows(AuthorizationException.class, () -> getService().create(newDomain, null));
+        assertThrows(AuthenticationException.class, () -> getService().create(newDomain, null));
         verifyNoInteractions(getMockDao());
     }
 
@@ -49,9 +50,9 @@ public abstract class AbstractCrudServiceTestCase<
     }
 
     @Test
-    void update_WhenRequesterIdIsNull_ShouldThrowAuthorizationException() {
+    void update_WhenRequesterIdIsNull_ShouldThrowAuthenticationException() {
         final UpdateDomain updateDomain = createUpdateDomain();
-        assertThrows(AuthorizationException.class, () -> getService().update(UUID.randomUUID(), updateDomain, null));
+        assertThrows(AuthenticationException.class, () -> getService().update(UUID.randomUUID(), updateDomain, null));
         verifyNoInteractions(getMockDao());
     }
 
@@ -106,8 +107,8 @@ public abstract class AbstractCrudServiceTestCase<
     }
 
     @Test
-    void loadById_WhenRequesterIdIsNull_ShouldThrowAuthorizationException() {
-        assertThrows(AuthorizationException.class, () -> getService().loadById(UUID.randomUUID(), null));
+    void loadById_WhenRequesterIdIsNull_ShouldThrowAuthenticationException() {
+        assertThrows(AuthenticationException.class, () -> getService().loadById(UUID.randomUUID(), null));
         verifyNoInteractions(getMockDao());
     }
 
@@ -136,8 +137,8 @@ public abstract class AbstractCrudServiceTestCase<
     }
 
     @Test
-    void delete_WhenRequesterIdIsNull_ShouldThrowAuthorizationException() {
-        assertThrows(AuthorizationException.class, () -> getService().delete(UUID.randomUUID(), null));
+    void delete_WhenRequesterIdIsNull_ShouldThrowAuthenticationException() {
+        assertThrows(AuthenticationException.class, () -> getService().delete(UUID.randomUUID(), null));
         verifyNoInteractions(getMockDao());
     }
 

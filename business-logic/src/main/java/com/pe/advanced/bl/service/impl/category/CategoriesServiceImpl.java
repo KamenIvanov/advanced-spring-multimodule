@@ -14,6 +14,7 @@ import com.pe.advanced.domain.category.Category;
 import com.pe.advanced.domain.category.CategoryStatus;
 import com.pe.advanced.domain.category.NewCategory;
 import com.pe.advanced.domain.category.UpdateCategory;
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.transformers.Transformer;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,7 @@ public class CategoriesServiceImpl extends AbstractCrudService<NewCategory, Upda
     @Transactional
     public void changeStatus(UUID id, CategoryStatus newStatus, UUID requesterId) {
         if (requesterId == null) {
-            throw new AuthorizationException(UNAUTHORIZED);
+            throw new AuthenticationException(UNAUTHENTICATED);
         }
 
         final var category = loadOrThrowNotFound(() -> getDao().loadById(id));

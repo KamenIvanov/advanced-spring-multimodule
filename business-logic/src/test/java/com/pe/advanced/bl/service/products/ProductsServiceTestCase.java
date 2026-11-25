@@ -5,6 +5,7 @@ import com.pe.advanced.bl.service.ProductsService;
 import com.pe.advanced.bl.service.impl.product.ProductsServiceImpl;
 import com.pe.advanced.dao.api.category.assignment.CategoryAssignmentDao;
 import com.pe.advanced.dao.api.product.ProductDao;
+import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
 import com.pe.advanced.domain.product.*;
@@ -57,8 +58,8 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, Up
     }
 
     @Test
-    void changeStatus_WhenRequesterIdIsNull_ShouldThrowAuthorizationException() {
-        assertThrows(AuthorizationException.class, () -> productsService.changeStatus(UUID.randomUUID(), ProductStatus.ACTIVE, null));
+    void changeStatus_WhenRequesterIdIsNull_ShouldThrowAuthenticationException() {
+        assertThrows(AuthenticationException.class, () -> productsService.changeStatus(UUID.randomUUID(), ProductStatus.ACTIVE, null));
         verifyNoInteractions(productDao);
     }
 
