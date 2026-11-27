@@ -52,15 +52,15 @@ public abstract class AbstractCrudServiceTestCase<
     @Test
     void update_WhenRequesterIdIsNull_ShouldThrowAuthenticationException() {
         final UpdateDomain updateDomain = createUpdateDomain();
-        assertThrows(AuthenticationException.class, () -> getService().update(UUID.randomUUID(), updateDomain, null));
+        assertThrows(AuthenticationException.class, () -> getService().update(UUID.randomUUID(), updateDomain, null, null));
         verifyNoInteractions(getMockDao());
     }
 
     @Test
     void update_WhenEntityIdIsNull_ShouldThrowNotFoundException() {
         final UpdateDomain updateDomain = createUpdateDomain();
-        assertThrows(NotFoundException.class, () -> getService().update(null, updateDomain, requesterId));
-        verify(getMockDao(), never()).update(any());
+        assertThrows(NotFoundException.class, () -> getService().update(null, updateDomain, requesterId, null));
+        verify(getMockDao(), never()).update(any(), any());
     }
 
     @Test
@@ -69,8 +69,8 @@ public abstract class AbstractCrudServiceTestCase<
         final UpdateDomain updateDomain = createUpdateDomain();
 
         when(getMockDao().loadById(missingId)).thenReturn(null);
-        assertThrows(NotFoundException.class, () -> getService().update(missingId, updateDomain, requesterId));
-        verify(getMockDao(), never()).update(any());
+        assertThrows(NotFoundException.class, () -> getService().update(missingId, updateDomain, requesterId, null));
+        verify(getMockDao(), never()).update(any(), any());
     }
 
     @Test
@@ -79,8 +79,8 @@ public abstract class AbstractCrudServiceTestCase<
         final UpdateDomain updateDomain = createUpdateDomain();
 
         when(getMockDao().loadById(existingDomain.getId())).thenReturn(existingDomain);
-        assertThrows(AuthorizationException.class, () -> getService().update(existingDomain.getId(), updateDomain, requesterId));
-        verify(getMockDao(), never()).update(any());
+        assertThrows(AuthorizationException.class, () -> getService().update(existingDomain.getId(), updateDomain, requesterId, null));
+        verify(getMockDao(), never()).update(any(), any());
     }
 
     @Test
@@ -89,12 +89,12 @@ public abstract class AbstractCrudServiceTestCase<
         final UpdateDomain updateDomain = createUpdateDomain();
 
         when(getMockDao().loadById(existingDomain.getId())).thenReturn(existingDomain);
-        when(getMockDao().update(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(getMockDao().update(any(), any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        final Domain result = getService().update(existingDomain.getId(), updateDomain, requesterId);
+        final Domain result = getService().update(existingDomain.getId(), updateDomain, requesterId, null);
 
         final ArgumentCaptor<Domain> captor = ArgumentCaptor.captor();
-        verify(getMockDao(), times(1)).update(captor.capture());
+        verify(getMockDao(), times(1)).update(captor.capture(), any());
         final Domain persisted = captor.getValue();
 
         assertEquals(existingDomain.getId(), persisted.getId());

@@ -57,6 +57,10 @@ public class ProductDaoImpl extends SearchableDaoImpl<
                 predicates.add(cb.equal(root.get("createdById"), params.getCreatedById()));
             }
 
+            if(params.getStatuses() != null && !params.getStatuses().isEmpty()){
+                predicates.add(root.get("status").in(params.getStatuses().stream().map(ProductStatusTransformer.instance::createInput).toList()));
+            }
+
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

@@ -49,9 +49,9 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, Up
         final UpdateProduct updateDto = createUpdateDomain();
 
         when(productDao.loadById(existing.getId())).thenReturn(existing);
-        when(productDao.update(existing)).thenReturn(existing);
+        when(productDao.update(existing, null)).thenReturn(existing);
 
-        final Product result = productsService.update(existing.getId(), updateDto, requesterId);
+        final Product result = productsService.update(existing.getId(), updateDto, requesterId, null);
         assertEquals(updateDto.getName(), result.getName());
         assertEquals(updateDto.getSku(), result.getSku());
         assertEquals(0, updateDto.getPrice().compareTo(result.getPrice()));
@@ -59,7 +59,7 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, Up
 
     @Test
     void changeStatus_WhenRequesterIdIsNull_ShouldThrowAuthenticationException() {
-        assertThrows(AuthenticationException.class, () -> productsService.changeStatus(UUID.randomUUID(), ProductStatus.ACTIVE, null));
+        assertThrows(AuthenticationException.class, () -> productsService.changeStatus(UUID.randomUUID(), ProductStatus.ACTIVE, null, null));
         verifyNoInteractions(productDao);
     }
 
@@ -67,35 +67,35 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, Up
     void changeStatus_WhenEntityDoesNotExist_ShouldThrowNotFoundException() {
         final UUID missingId = UUID.randomUUID();
         when(productDao.loadById(missingId)).thenReturn(null);
-        assertThrows(NotFoundException.class, () -> productsService.changeStatus(missingId, ProductStatus.ACTIVE, requesterId));
-        verify(productDao, never()).update(any());
+        assertThrows(NotFoundException.class, () -> productsService.changeStatus(missingId, ProductStatus.ACTIVE, requesterId, null));
+        verify(productDao, never()).update(any(), any());
     }
 
     @Test
     void changeStatus_WhenRequesterIsNotOwner_ShouldThrowAuthorizationExceptionAndNeverPersist() {
         final Product existing = persistedProduct(UUID.randomUUID(), alternativeRequesterId, ProductStatus.DRAFT);
         when(productDao.loadById(existing.getId())).thenReturn(existing);
-        assertThrows(AuthorizationException.class, () -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId));
-        verify(productDao, never()).update(any());
+        assertThrows(AuthorizationException.class, () -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId, null));
+        verify(productDao, never()).update(any(), any());
     }
 
     @Test
     void changeStatus_WhenTransitionIsValid_ShouldPersistNewStatus() {
         final Product existing = persistedProduct(UUID.randomUUID(), requesterId, ProductStatus.DRAFT);
         when(productDao.loadById(existing.getId())).thenReturn(existing);
-        when(productDao.update(existing)).thenReturn(existing);
+        when(productDao.update(existing, null)).thenReturn(existing);
 
-        productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId);
+        productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId, null);
         assertEquals(ProductStatus.ACTIVE, existing.getStatus());
-        verify(productDao, times(1)).update(existing);
+        verify(productDao, times(1)).update(existing, null);
     }
 
     @Test
     void changeStatus_WhenTransitionIsIllegal_ShouldThrowAndNeverPersist() {
         final Product existing = persistedProduct(UUID.randomUUID(), requesterId, ProductStatus.ARCHIVED);
         when(productDao.loadById(existing.getId())).thenReturn(existing);
-        assertThrows(IllegalStateException.class, () -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId));
-        verify(productDao, never()).update(any());
+        assertThrows(IllegalStateException.class, () -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId, null));
+        verify(productDao, never()).update(any(), any());
     }
 
     @Test
@@ -103,11 +103,11 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, Up
         final Product existing = persistedProduct(UUID.randomUUID(), requesterId, ProductStatus.ACTIVE);
         when(productDao.loadById(existing.getId())).thenReturn(existing);
 
-        assertDoesNotThrow(() -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId));
+        assertDoesNotThrow(() -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId, null));
 
         assertEquals(ProductStatus.ACTIVE, existing.getStatus());
         verify(productDao, times(1)).loadById(existing.getId());
-        verify(productDao, never()).update(any());
+        verify(productDao, never()).update(any(), any());
     }
 
     @Test
@@ -116,9 +116,9 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, Up
         when(productDao.loadById(existing.getId())).thenReturn(existing);
 
         // The same-status short-circuit must not bypass the ownership check - authorize() has to run before we ever compare statuses.
-        assertThrows(AuthorizationException.class, () -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId));
+        assertThrows(AuthorizationException.class, () -> productsService.changeStatus(existing.getId(), ProductStatus.ACTIVE, requesterId, null));
 
-        verify(productDao, never()).update(any());
+        verify(productDao, never()).update(any(), any());
     }
 
     @Test
@@ -142,9 +142,9 @@ class ProductsServiceTestCase extends AbstractCrudServiceTestCase<NewProduct, Up
         final UpdateProduct updateDto = createUpdateDomain();
 
         when(productDao.loadById(existing.getId())).thenReturn(existing);
-        when(productDao.update(existing)).thenReturn(existing);
+        when(productDao.update(existing, null)).thenReturn(existing);
 
-        final Product result = productsService.update(existing.getId(), updateDto, requesterId);
+        final Product result = productsService.update(existing.getId(), updateDto, requesterId, null);
 
         // The transformer's else-branch mutates the existing specification rather than
         // allocating a new one - this asserts that behavior directly, not just its effect.

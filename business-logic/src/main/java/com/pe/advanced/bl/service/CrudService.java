@@ -8,7 +8,11 @@ public interface CrudService<CreateDomain, UpdateDomain, Domain extends Abstract
 
     Domain create(CreateDomain newDomain, UUID requesterId);
 
-    Domain update(UUID id, UpdateDomain updateDomain, UUID requesterId);
+    /**
+     * @param expectedVersion the version the caller read, or null to write without checking that
+     *                        the stored row has not moved since
+     */
+    Domain update(UUID id, UpdateDomain updateDomain, UUID requesterId, Integer expectedVersion);
 
     Domain loadById(UUID id, UUID requesterId);
 

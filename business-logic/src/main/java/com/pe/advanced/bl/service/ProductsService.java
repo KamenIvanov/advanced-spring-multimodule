@@ -39,5 +39,5 @@ public interface ProductsService extends CrudService<NewProduct, UpdateProduct, 
      * Moves the product into a new status and returns it as it now stands. An unchanged status
      * is not an error and writes nothing, so the product comes back as it was found.
      */
-    Product changeStatus(UUID id, ProductStatus newStatus, UUID requesterId);
+    Product changeStatus(UUID id, ProductStatus newStatus, UUID requesterId, Integer expectedVersion);
 }

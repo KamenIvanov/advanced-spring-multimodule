@@ -50,3 +50,5 @@ Thumbs.db
 *.wmv
 
 local.properties
+# Rotated application logs
+application/[0-9][0-9][0-9][0-9]-[0-9][0-9]/

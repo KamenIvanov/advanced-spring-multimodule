@@ -12,6 +12,7 @@ import com.pe.advanced.dao.api.search.ResultPage;
 import com.pe.advanced.dao.api.search.SortDirection;
 import com.pe.advanced.domain.exceptions.AuthenticationException;
 import com.pe.advanced.domain.exceptions.AuthorizationException;
+import com.pe.advanced.domain.exceptions.NotFoundException;
 import com.pe.advanced.domain.product.NewProduct;
 import com.pe.advanced.domain.product.Product;
 import com.pe.advanced.domain.product.ProductStatus;
@@ -19,9 +20,18 @@ import com.pe.advanced.domain.product.UpdateProduct;
 import com.pe.advanced.domain.transformers.Transformer;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateProduct, Product, ProductDao> implements ProductsService {
+
+    /**
+     * Everything an anonymous reader may see. A draft is excluded because it has never been
+     * published; an archived product is not, because it may still be linked to from somewhere and
+     * the status field is what tells the reader it cannot be ordered.
+     */
+    private static final Set<ProductStatus> PUBLISHED = EnumSet.complementOf(EnumSet.of(ProductStatus.DRAFT));
 
     private final CategoryAssignmentDao assignmentDao;
 
@@ -40,7 +50,9 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
     @Override
     @Transactional(readOnly = true)
     public ResultPage<Product> getProducts(int page, int size, ProductSort sort, SortDirection direction, String query) {
-        return getDao().search(params(page, size, sort, direction, query));
+        final var params = params(page, size, sort, direction, query);
+        params.setStatuses(PUBLISHED);
+        return getDao().search(params);
     }
 
     @Override
@@ -58,12 +70,20 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
     @Override
     @Transactional(readOnly = true)
     public Product loadPublicById(UUID id) {
-        return loadOrThrowNotFound(() -> getDao().loadById(id));
+        final var product = loadOrThrowNotFound(() -> getDao().loadById(id));
+
+        // A draft has never been published, so to an anonymous reader it does not exist. Saying
+        // "forbidden" instead would confirm that the identification is a real product.
+        if (product.getStatus() == ProductStatus.DRAFT) {
+            throw new NotFoundException(MISSING_ENTITY);
+        }
+
+        return product;
     }
 
     @Override
     @Transactional
-    public Product changeStatus(UUID id, ProductStatus newStatus, UUID requesterId) {
+    public Product changeStatus(UUID id, ProductStatus newStatus, UUID requesterId, Integer expectedVersion) {
         if (requesterId == null) {
             throw new AuthenticationException(UNAUTHENTICATED);
         }
@@ -80,7 +100,7 @@ public class ProductsServiceImpl extends AbstractCrudService<NewProduct, UpdateP
         product.transitionTo(newStatus);
         product.setUpdatedById(requesterId);
 
-        return getDao().update(product);
+        return getDao().update(product, expectedVersion);
     }
 
     @Override

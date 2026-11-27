@@ -32,4 +32,13 @@ public abstract class AbstractUpdatableEntity extends AbstractCreatableEntity {
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    /**
+     * Hibernate owns this column, so there is no setter and this reader is package private: the
+     * only code with any business reading it is the DAO that compares it with what a caller
+     * claims to have read.
+     */
+    Integer getVersion() {
+        return version;
+    }
 }

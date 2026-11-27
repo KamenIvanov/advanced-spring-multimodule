@@ -39,7 +39,7 @@ public abstract class AbstractCrudService<
 
     @Override
     @Transactional
-    public Domain update(UUID id, UpdateDomain updateDomain, UUID requesterId) {
+    public Domain update(UUID id, UpdateDomain updateDomain, UUID requesterId, Integer expectedVersion) {
         if (requesterId == null) {
             throw new AuthenticationException(UNAUTHENTICATED);
         }
@@ -55,7 +55,7 @@ public abstract class AbstractCrudService<
         //
         getUpdateTransformer().copyToOutput(updateDomain, domain);
         domain.setUpdatedById(requesterId);
-        return dao.update(domain);
+        return dao.update(domain, expectedVersion);
     }
 
     @Override

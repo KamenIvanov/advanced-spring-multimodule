@@ -10,6 +10,7 @@ import com.pe.advanced.api.rest.secured.product.ProductsRestService;
 import com.pe.advanced.bl.service.ProductsService;
 import com.pe.advanced.domain.requester.CurrentRequesterProvider;
 import com.pe.advanced.spring.rest.v1.AbstractRestServiceImpl;
+import com.pe.advanced.spring.rest.v1.precondition.IfMatch;
 import com.pe.advanced.spring.transformers.product.NewProductTransformer;
 import com.pe.advanced.spring.transformers.product.ProductStatusTransformer;
 import com.pe.advanced.spring.transformers.product.ProductTransformer;
@@ -51,7 +52,7 @@ public class ProductsRestServiceImpl extends AbstractRestServiceImpl<ProductsSer
     @Override
     public ProductDto changeStatus(UUID id, ProductStatusDto statusDto) {
         final var status = ProductStatusTransformer.instance.createInput(statusDto);
-        final var product = getServiceWorker().changeStatus(id, status, currentRequesterId());
+        final var product = getServiceWorker().changeStatus(id, status, currentRequesterId(), IfMatch.required());
         return ProductTransformer.instance.createOutput(product);
     }
 
@@ -65,7 +66,7 @@ public class ProductsRestServiceImpl extends AbstractRestServiceImpl<ProductsSer
     @Override
     public ProductDto update(UUID id, UpdateProductDto updateProductDto) {
         final var updateProduct = UpdateProductTransformer.instance.createOutput(updateProductDto);
-        final var product = getServiceWorker().update(id, updateProduct, currentRequesterId());
+        final var product = getServiceWorker().update(id, updateProduct, currentRequesterId(), IfMatch.required());
         return ProductTransformer.instance.createOutput(product);
     }
 

@@ -1,8 +1,6 @@
 package com.pe.advanced.spring.config;
 
 import com.pe.advanced.api.json.JsonMapperSingleton;
-import com.pe.advanced.api.rest.pub.product.ProductsFilteringRestService;
-import com.pe.advanced.api.rest.secured.product.ProductsRestService;
 import com.pe.advanced.bl.service.ProductsService;
 import com.pe.advanced.domain.requester.CurrentRequesterProvider;
 import com.pe.advanced.spring.exception.GeneralExceptionHandler;
@@ -39,12 +37,12 @@ public class RestConfiguration {
     }
 
     @Bean
-    public ProductsRestService productsRestService(ProductsService productsService, CurrentRequesterProvider currentRequesterProvider) {
+    public ProductsRestServiceImpl productsRestService(ProductsService productsService, CurrentRequesterProvider currentRequesterProvider) {
         return new ProductsRestServiceImpl(productsService, currentRequesterProvider);
     }
 
     @Bean
-    public ProductsFilteringRestService productsFilteringRestService(ProductsService productsService) {
+    public ProductsFilteringRestServiceImpl productsFilteringRestService(ProductsService productsService) {
         return new ProductsFilteringRestServiceImpl(productsService);
     }
 }

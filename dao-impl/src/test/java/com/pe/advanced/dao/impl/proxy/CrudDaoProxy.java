@@ -23,7 +23,12 @@ public abstract class CrudDaoProxy<IdType, Domain extends AbstractCreatable<IdTy
 
     @Override
     public Domain update(Domain domain) {
-        final var updated = proxied.update(domain);
+        return update(domain, null);
+    }
+
+    @Override
+    public Domain update(Domain domain, Integer expectedVersion) {
+        final var updated = proxied.update(domain, expectedVersion);
         flushAndClear();
         return updated;
     }

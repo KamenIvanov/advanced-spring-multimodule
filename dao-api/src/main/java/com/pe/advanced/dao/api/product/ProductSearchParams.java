@@ -1,7 +1,9 @@
 package com.pe.advanced.dao.api.product;
 
 import com.pe.advanced.dao.api.search.AbstractParams;
+import com.pe.advanced.domain.product.ProductStatus;
 
+import java.util.Set;
 import java.util.UUID;
 
 public class ProductSearchParams extends AbstractParams<ProductSort> {
@@ -9,6 +11,7 @@ public class ProductSearchParams extends AbstractParams<ProductSort> {
     private String name;
     private String sku;
     private UUID createdById;
+    private Set<ProductStatus> statuses;
 
     public String getName() {
         return name;
@@ -32,5 +35,13 @@ public class ProductSearchParams extends AbstractParams<ProductSort> {
 
     public void setCreatedById(UUID createdById) {
         this.createdById = createdById;
+    }
+
+    public Set<ProductStatus> getStatuses() {
+        return statuses;
+    }
+
+    public void setStatuses(Set<ProductStatus> statuses) {
+        this.statuses = statuses;
     }
 }

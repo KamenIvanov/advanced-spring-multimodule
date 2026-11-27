@@ -2,6 +2,7 @@ package com.pe.advanced.dao.impl;
 
 import com.pe.advanced.dao.api.CrudDao;
 import com.pe.advanced.domain.AbstractCreatable;
+import com.pe.advanced.domain.exceptions.ConflictException;
 import com.pe.advanced.domain.exceptions.NotFoundException;
 import com.pe.advanced.domain.transformers.BiTransformer;
 import jakarta.validation.ConstraintViolationException;
@@ -48,6 +49,11 @@ public abstract class CrudDaoImpl<
 
     @Override
     public Domain update(Domain domain) {
+        return update(domain, null);
+    }
+
+    @Override
+    public Domain update(Domain domain, Integer expectedVersion) {
         if (domain == null) {
             throw new IllegalArgumentException("Entity is mandatory");
         }
@@ -59,6 +65,7 @@ public abstract class CrudDaoImpl<
         var entity = repository.findById(domain.getId())
                 .orElseThrow(() -> new NotFoundException("Entity with id '" + domain.getId() + "' not found."));
 
+        requireExpectedVersion(entity, expectedVersion);
         transformer.copyToInput(domain, entity);
         preUpdate(entity);
         entity = repository.save(entity);
@@ -86,6 +93,25 @@ public abstract class CrudDaoImpl<
         }
         Objects.requireNonNull(domain.getId(), "ID must not be null");
         repository.findById(domain.getId()).ifPresent(repository::delete);
+    }
+
+    /**
+     * The caller read a row, decided what to change, and sent the version it saw. If the stored
+     * version has moved since, somebody else wrote in between and this request was composed
+     * against data that no longer exists.
+     * <p>
+     * Hibernate's own check compares the version it loaded moments ago, which only catches a race
+     * inside this transaction. This one catches a stale decision, which is the failure a caller
+     * can actually do something about.
+     */
+    private void requireExpectedVersion(Entity entity, Integer expectedVersion) {
+        if (expectedVersion == null || !(entity instanceof AbstractUpdatableEntity updatable)) {
+            return;
+        }
+
+        if (!Objects.equals(updatable.getVersion(), expectedVersion)) {
+            throw new ConflictException("The entity was changed by somebody else since it was read. Read it again and retry.");
+        }
     }
 
     protected void preCreate(Entity entity) {

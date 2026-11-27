@@ -49,9 +49,9 @@ class CategoriesServiceTestCase extends AbstractCrudServiceTestCase<NewCategory,
         final UpdateCategory updateDto = createUpdateDomain();
 
         when(categoryDao.loadById(existing.getId())).thenReturn(existing);
-        when(categoryDao.update(existing)).thenReturn(existing);
+        when(categoryDao.update(existing, null)).thenReturn(existing);
 
-        final Category result = categoriesService.update(existing.getId(), updateDto, requesterId);
+        final Category result = categoriesService.update(existing.getId(), updateDto, requesterId, null);
         assertEquals(updateDto.getName(), result.getName());
     }
 
